@@ -11,10 +11,12 @@ class Othello:
 
     def is_terminated(self):       
         if self.number_pawns>0:
-            if self.legal_moves(0) == False:
-                if self.legal_moves(1) == True:
-                    return True
-        return False
+            if self.legal_moves(0) * self.legal_moves(1) == False: #No legal move for both players
+                return True
+            else:
+                return False
+        else:
+            return True
     
     def get_winner(self):
         count = [0,0]
