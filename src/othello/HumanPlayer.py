@@ -11,7 +11,7 @@ class HumanPlayer(Player):
         if ord("1") <= ord(coord[1]) <= ord("8"):
             r = ord(coord[1]) - ord("1")
 
-        return (c, r)
+        return (r, c)
 
 
 if __name__ == "__main__":
