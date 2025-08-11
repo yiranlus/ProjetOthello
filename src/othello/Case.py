@@ -10,5 +10,6 @@ class Case:
     def pawn(self, value):
         self._pawn = value
 
+    @property
     def is_empty(self):
         return self._pawn is None
