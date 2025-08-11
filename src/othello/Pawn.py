@@ -16,3 +16,9 @@ class Pawn:
             self._color = 1
         else:
             self._color = 0
+
+if __name__ == "__main__":
+    p = Pawn(1)
+    print("color of pawn:", p.color)
+    p.flip()
+    print("color of pawn:", p.color)

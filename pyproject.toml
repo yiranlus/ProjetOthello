@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "othello"
 version = "0.0.1"
 readme = "README.md"
+requires-python = ">= 3.8"
 
 [project.scripts]
 othello-cli = "othello:main_cli"
