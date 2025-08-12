@@ -14,4 +14,4 @@ class Player:
     def make_move(self):
         """Ask the player to make a move. Return a tuple of (row, column).
         """
-        raise NotImplementedError()
+        pass

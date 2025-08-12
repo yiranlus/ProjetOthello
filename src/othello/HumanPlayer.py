@@ -5,7 +5,9 @@ class HumanPlayer(Player):
         super().__init__(color, name)
 
     def make_move(self):
-        coord = input("Your movement: ")
+        color_name = "black" if self.color == 0 else "white"
+        circle = "\u2b24" if self.color == 0 else "\u25ef"
+        coord = input(f"Your movement ({self.name}, {color_name} {circle}): ")
         if ord("A") <= ord(coord[0]) <= ord("H"):
             c = ord(coord[0]) - ord("A")
         if ord("1") <= ord(coord[1]) <= ord("8"):
