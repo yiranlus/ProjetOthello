@@ -50,15 +50,19 @@ class Othello:
             possible_move_black = self.get_possible_moves(0)
             possible_move_white = self.get_possible_moves(1)
             legal_move_white = False
+            # print("possible_move_white:",possible_move_white)
+            # print("possible_move_black:",possible_move_black)
             for move in possible_move_white: # Check the legality of all white moves
                 if self.legal_moves(move,id_player=1):
                     legal_move_white = True # If legal set True
+                    print("move: ",move)
                     break
             legal_move_black = False
             for move in possible_move_black: # Check the legality of all black moves
                 if self.legal_moves(move,id_player=0):
                     legal_move_black = True # If legal set True and stop the loop
-                    break
+                    print("move: ",move)
+
             if legal_move_black * legal_move_white == False: #No legal move for both players
                 return True
             else: # If there are legal moves to be played by at least one player
@@ -88,12 +92,14 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if
             it is legal and print the board.
         """
-        self.board.display()
+        self.board.display_console()
         requested_move = self.players[self.players_turn].make_move()
+        valid_move = self.legal_moves(requested_move)
         valid_move = self.legal_moves(requested_move)
         while not(valid_move): # If the requested move is not legal
             print("Illegal move, choose again")
             requested_move = self.players[self.players_turn].make_move()
+            valid_move = self.legal_moves(requested_move)
             valid_move = self.legal_moves(requested_move)
         self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
         self.number_pawns -= 1 # Update the number of pawns remaining off the board
@@ -136,38 +142,6 @@ class Othello:
 
         return False
 
-
-
-        if check_start: # if block for the first iteration
-            check_start=False # not going through this block in future runs
-            row,col = requested_move[0], requested_move[1]
-            id_opponent = (id_player+1)%2
-            for r,c in direction: # This loop determines all the possible moves to explore for 1st neighbors
-                neighbor_r = row + r
-                neighbor_c = col + c
-                if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
-                    if not(self.board.board[neighbor_r,neighbor_c].is_empty): # if there is a pawn on the case
-                        if self.board.board[neighbor_r,neighbor_c].pawn.color == id_opponent: # if the color of the pawn is the opponent's
-                            potential_move.append([(neighbor_r,neighbor_c),(r,c)]) # Add to potential moves
-        else: # For all runs that are not the first one
-            if not(requested_move): # If there is no more direction to explore
-                return False # Move is illegal
-            else: # If requested_move is not empty
-                for neighbor,direct in requested_move:
-                    neighbor_r,neighbor_c = neighbor[0],neighbor[1]
-                    r,c = direct[0],direct[1]
-                    if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
-                        if not(self.board.board[neighbor_r,neighbor_c].is_empty):  # if there is a pawn on the case
-                            if self.board.board[neighbor_r,neighbor_c].pawn.color == id_player: # if the color of the pawn is the player's
-                                return True # This move is legal
-                            else:  # if the color of the pawn is the opponent's
-                                new_r = neighbor_r + r # Update the row id
-                                new_c = neighbor_c + c # Update the column id
-                                potential_move.append([(new_r,new_c),(r,c)])  # Add it to potential_move
-        return self.legal_moves(potential_move,check_start) # Recurssive call until True is returned or
-    # no more directions are to be investigated, then return False
-
-
 if __name__ == "__main__":
     from othello.HumanPlayer import HumanPlayer
 
@@ -175,8 +149,7 @@ if __name__ == "__main__":
     player2 = HumanPlayer(1, "Alicia")
     players = [player1,player2]
     game = Othello(players)
-    while not game.is_terminated():
-        game.ask_players()
+    print(game.is_terminated())
 
 
 
