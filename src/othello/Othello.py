@@ -87,14 +87,14 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if 
             it is legal and print the board.
         """   
-        self.board.print()
+        self.board.display_console()
         requested_move = self.players[self.players_turn].make_move()
         valid_move = self.legal_move(requested_move)
         while not(valid_move): # If the requested move is not legal
             print("Illegal move, choose again")
             requested_move = self.players[self.players_turn].make_move()
             valid_move = self.legal_move(requested_move)
-        self.board.place_pawn(requested_move) # Place the pawn
+        self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
         self.number_pawns -= 1 # Update the number of pawns remaining off the board
         self.players_turn = (self.players_turn +1)%2 # Switch players turn
 
