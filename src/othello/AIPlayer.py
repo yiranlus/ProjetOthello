@@ -1,6 +1,6 @@
 from .Player import Player
 
-class HumanPlayer(Player):
+class AIPlayer(Player):
     def __init__(self, color, name=""):
         super().__init__(color, name)
 
