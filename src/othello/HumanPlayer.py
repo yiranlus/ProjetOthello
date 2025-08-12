@@ -14,6 +14,9 @@ class HumanPlayer(Player):
         while not is_good_coord:
             try:
                 coord = input(f"Your movement ({self.name}, {color_name} {circle}): ")
+                if coord == "q":
+                    print("Game terminated.")
+                    exit(0)
                 if ord("A") <= ord(coord[0]) <= ord("H"):
                     c = ord(coord[0]) - ord("A")
                 else:
@@ -22,7 +25,7 @@ class HumanPlayer(Player):
                     r = ord(coord[1]) - ord("1")
                 else:
                     raise ValueError()
-            except:
+            except ValueError:
                 print("Not good move! Reenter, please!")
             else:
                 is_good_coord = True
