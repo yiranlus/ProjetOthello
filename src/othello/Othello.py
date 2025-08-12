@@ -12,7 +12,6 @@ class Othello:
             Player (list of class Player): list containing the info of the 2 players
         """
         self.players_turn = 0 # Black (0) or White (1) to play
-        self.number_pawns = 60 # Number of pawns remaining off the board
         self.board = Board()
 
         self.players = [Player[0],Player[1]]
@@ -48,7 +47,7 @@ class Othello:
         """
         # self.board.display()
         direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
-        if self.number_pawns>0: # If there are still pawns to be played
+        if self.board.number_pawns >0: # If there are still pawns to be played
             possible_move_black = self.get_possible_moves(0)
             possible_move_white = self.get_possible_moves(1)
             legal_move_white = False
@@ -107,7 +106,6 @@ class Othello:
             valid_move = self.legal_moves(requested_move)
         self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
         self.board.update_board(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
-        self.number_pawns -= 1 # Update the number of pawns remaining off the board
         self.players_turn = (self.players_turn +1)%2 # Switch players turn
 
     def start_game(self):
