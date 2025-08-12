@@ -130,7 +130,5 @@ if __name__ == "__main__":
     board = Board()
     board.place_pawn(3, 2, 1)
     board.place_pawn(1,1,1)
-    extra = [(1,1),(2,4)]
-    board.display()
-    board.display('matplotlib', extra)
-    
+    board.display(extra=[(0,0), (2,2)])
+    # print(board.display('matplotlib'))
