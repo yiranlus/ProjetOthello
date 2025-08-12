@@ -14,7 +14,7 @@ class Othello:
         self.board = Board()
         self.players = [Player(0),Player(1)]
 
-    def is_terminated(self):  
+    def is_terminated(self):   # WIP
         """ Check if the game is done (no more pawns or legal moves for both players).
         Output:
             True if the game is done, False otherwise
@@ -52,13 +52,13 @@ class Othello:
         self.board.print()
         requested_move = self.players[self.players_turn].make_move()
         valid_move = self.legal_move(requested_move)
-        while not(valid_move):
+        while not(valid_move): # If the requested move is not legal
             print("Illegal move, choose again")
             requested_move = self.players[self.players_turn].make_move()
             valid_move = self.legal_move(requested_move)
-        self.board.place_pawn(requested_move)
-        self.number_pawns -= 1
-        self.players_turn = (self.players_turn +1)%2
+        self.board.place_pawn(requested_move) # Place the pawn
+        self.number_pawns -= 1 # Update the number of pawns remaining off the board
+        self.players_turn = (self.players_turn +1)%2 # Switch players turn
 
     def start_game(self):
         self.ask_players()
@@ -71,32 +71,33 @@ class Othello:
     def legal_moves(self,requested_move,check_start=True): # Recurssive approach
         direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
         potential_move = []
-        if check_start:
-            check_start=False
+        if check_start: # if block for the first iteration 
+            check_start=False # not going through this block in future runs
             row,col = requested_move[0], requested_move[1]
-            board , id_player = self.board , self.players_turn
+            id_player =  self.players_turn # Get whose turn it is
             id_opponent = (id_player+1)%2
             for r,c in direction: # This loop determines all the possible moves to explore for 1st neighbors
                 neighbor_r = row + r
                 neighbor_c = col + r
-                if neighbor_r>0 and neighbor_c >0 and neighbor_r<7 and neighbor_c<7:
-                    if not(self.board[neighbor_r,neighbor_c].is_empty):
-                        if self.board[neighbor_r,neighbor_c].pawn.color == id_opponent:
-                            potential_move.append([(neighbor_r,neighbor_c),(r,c)])
-        else:
-            if not(requested_move):
-                return False
-            else:
+                if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
+                    if not(self.board[neighbor_r,neighbor_c].is_empty): # if there is a pawn on the case
+                        if self.board[neighbor_r,neighbor_c].pawn.color == id_opponent: # if the color of the pawn is the opponent's
+                            potential_move.append([(neighbor_r,neighbor_c),(r,c)]) # Add to potential moves
+        else: # For all runs that are not the first one
+            if not(requested_move): # If there is no more direction to explore
+                return False # Move is illegal
+            else: # If requested_move is not empty
                 for neighbor_r,neighbor_c,r,c in requested_move:
-                    new_r = neighbor_r + r 
-                    new_c = neighbor_c + c
-                    if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7:
-                        if not(self.board[neighbor_r,neighbor_c].is_empty):
-                            if self.board[neighbor_r,neighbor_c].pawn.color == id_player:
-                                return True
-                            else:
-                                potential_move.append([(new_r,new_c),(r,c)])  
-        return self.legal_moves(potential_move,check_start)
+                    if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
+                        if not(self.board[neighbor_r,neighbor_c].is_empty):  # if there is a pawn on the case
+                            if self.board[neighbor_r,neighbor_c].pawn.color == id_player: # if the color of the pawn is the player's
+                                return True # This move is legal
+                            else:  # if the color of the pawn is the opponent's
+                                new_r = neighbor_r + r # Update the row id
+                                new_c = neighbor_c + c # Update the column id
+                                potential_move.append([(new_r,new_c),(r,c)])  # Add it to potential_move
+        return self.legal_moves(potential_move,check_start) # Recurssive call until True is returned or 
+    # no more directions are to be investigated, then return False
 
 
 if __name__ == "__main__":
