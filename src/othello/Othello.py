@@ -55,13 +55,11 @@ class Othello:
             for move in possible_move_white: # Check the legality of all white moves
                 if self.legal_moves(move,id_player=1):
                     legal_move_white = True # If legal set True
-                    print("move: ",move)
                     break
             legal_move_black = False
             for move in possible_move_black: # Check the legality of all black moves
                 if self.legal_moves(move,id_player=0):
                     legal_move_black = True # If legal set True and stop the loop
-                    print("move: ",move)
 
             if legal_move_black * legal_move_white == False: #No legal move for both players
                 return True
@@ -92,7 +90,7 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if
             it is legal and print the board.
         """
-        self.board.display_console()
+        self.board.display()
         requested_move = self.players[self.players_turn].make_move()
         valid_move = self.legal_moves(requested_move)
         valid_move = self.legal_moves(requested_move)
@@ -149,7 +147,8 @@ if __name__ == "__main__":
     player2 = HumanPlayer(1, "Alicia")
     players = [player1,player2]
     game = Othello(players)
-    print(game.is_terminated())
+    while not game.is_terminated():
+        game.ask_players()
 
 
 
