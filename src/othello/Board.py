@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
+from .Color import Color
 from .Pawn import Pawn
 from .Case import Case
 
@@ -9,7 +10,7 @@ class Board:
     def __init__(self):
         self.rows = 8
         self.cols = 8
-        self.number_pawns = 60 
+        self.number_pawns = 60
 
         # initialize empty board
         self.board = np.empty((self.rows, self.cols), dtype=Case)
@@ -18,21 +19,21 @@ class Board:
                 self.board[row, col] = Case()
 
         # initialize 4 center squares
-        self.board[3,3].pawn = Pawn(1)
-        self.board[3,4].pawn = Pawn(0)
-        self.board[4,3].pawn = Pawn(0)
-        self.board[4,4].pawn = Pawn(1)
+        self.board[3,3].pawn = Pawn(Color.WHITE)
+        self.board[3,4].pawn = Pawn(Color.BLACK)
+        self.board[4,3].pawn = Pawn(Color.BLACK)
+        self.board[4,4].pawn = Pawn(Color.WHITE)
 
-        f = lambda x: x.pawn.color if x.pawn else None
+        f = lambda x: x.pawn.color.value if x.pawn else None
         self.f_vec = np.vectorize(f)
 
 
-    def place_pawn(self, r, c, color):
+    def place_pawn(self, r, c, color: Color):
         self.board[r, c].pawn = Pawn(color)
         self.number_pawns -= 1
 
 
-    def update_board(self, r, c, color):
+    def update_board(self, r, c, color: Color):
         rows = [-1, 0, 1]
         cols = [-1, 0, 1]
 
@@ -98,9 +99,9 @@ class Board:
                             print("*", end=" ")
                         else:
                             print(" ", end=" ")
-                    elif self.board[i,j].pawn.color == 0:
+                    elif self.board[i,j].pawn.color == Color.BLACK:
                         print("\u2b24", end=" ")
-                    elif self.board[i,j].pawn.color == 1:
+                    elif self.board[i,j].pawn.color == Color.WHITE:
                         print("\u25ef", end=" ")
                 print()
 
@@ -180,16 +181,16 @@ class Board:
 
 if __name__ == "__main__":
     board = Board()
-    board.place_pawn(3, 5, 1)
-    board.update_board(3, 5, 1)
-    board.place_pawn(3, 6, 1)
+    board.place_pawn(3, 5, Color.WHITE)
+    board.update_board(3, 5, Color.WHITE)
+    board.place_pawn(3, 6, Color.WHITE)
     extra = [(1,1),(2,4)]
     #board.display()
     #board.display('matplotlib', extra)
-    board.place_pawn(2, 5, 0)
-    board.update_board(2, 5, 0)
-    board.place_pawn(4, 5, 0)
-    board.update_board(4, 5, 0)
+    board.place_pawn(2, 5, Color.BLACK)
+    board.update_board(2, 5, Color.BLACK)
+    board.place_pawn(4, 5, Color.BLACK)
+    board.update_board(4, 5, Color.BLACK)
     board.display()
     board.display('matplotlib', extra)
 

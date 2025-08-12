@@ -1,8 +1,8 @@
 from othello.HumanPlayer import HumanPlayer
 from othello.Othello import Othello
+from othello.Color import Color
 
-player1 = HumanPlayer(0, "Alexis")
-player2 = HumanPlayer(1, "Alicia")
-players = [player1,player2]
-game = Othello(players)
+player1 = HumanPlayer(Color.BLACK, "Alexis")
+player2 = HumanPlayer(Color.WHITE, "Alicia")
+game = Othello(player1, player2)
 game.start_game()
