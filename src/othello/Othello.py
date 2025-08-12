@@ -98,6 +98,7 @@ class Othello:
             requested_move = self.players[self.players_turn].make_move()
             valid_move = self.legal_moves(requested_move)
         self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
+        self.board.update_board(requested_move[0],requested_move[1],self.players_turn) # Update the pawn
         self.number_pawns -= 1 # Update the number of pawns remaining off the board
         self.players_turn = (self.players_turn +1)%2 # Switch players turn
 
@@ -129,7 +130,7 @@ class Othello:
                             potential_move.append([(neighbor_r,neighbor_c),(r,c)]) # Add to potential moves
         else: # For all runs that are not the first one
             if not(requested_move): # If there is no more direction to explore
-                return False # Move is illegal
+                return False # Move is illegal            
             else: # If requested_move is not empty
                 for neighbor,direct in requested_move:
                     neighbor_r,neighbor_c = neighbor[0],neighbor[1]
