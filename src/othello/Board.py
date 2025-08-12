@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from Pawn import Pawn
-from Case import Case
+from .Pawn import Pawn
+from .Case import Case
 
 class Board:
     def __init__(self):
@@ -26,14 +26,14 @@ class Board:
     def place_pawn(self, r, c, color):
         self.board[r, c].pawn = Pawn(color)
 
-    
+
     def display(self, display_choice = 'console'):
         if display_choice == 'console':
 
             # print(f_vec(self.board))
-            print(" A B C D E F G H")
+            print("  A B C D E F G H")
             for i in range(8):
-                print(i+1, end="")
+                print(i+1, end=" ")
                 for j in range(8):
                     if not self.board[i,j].pawn:
                         print(" ", end=" ")
@@ -46,7 +46,7 @@ class Board:
         elif display_choice == 'matplotlib':
             x_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
-        
+
             f2 = lambda x: x.pawn.color if x.pawn else np.nan
             f_vec2 = np.vectorize(f2)
 
@@ -66,7 +66,7 @@ class Board:
 
             ax.set_xlim([0,8])
             ax.set_ylim([0,8])
-        
+
             # remove the major ticks and their corresponding labels in x-dir
             ax.tick_params(
                 axis='x',          # changes apply to the x-axis
@@ -74,7 +74,7 @@ class Board:
                 bottom=False,      # ticks along the bottom edge are off
                 top=False,         # ticks along the top edge are off
                 labelbottom=False) # labels along the bottom edge are off
-        
+
             # remove the minor ticks but keep their corresponding labels in x-dir
             ax.tick_params(
                 axis='x',          # changes apply to the x-axis
@@ -83,7 +83,7 @@ class Board:
                 top=False,         # ticks along the top edge are off
                 labeltop=True,
                 labelbottom=False) # labels along the bottom edge are off
-        
+
             # remove the major ticks and their corresponding labels in y-dir
             ax.tick_params(
                 axis='y',          # changes apply to the x-axis
@@ -91,7 +91,7 @@ class Board:
                 left=False,      # ticks along the bottom edge are off
                 right=False,         # ticks along the top edge are off
                 labelleft=False) # labels along the bottom edge are off
-        
+
             # remove the minor ticks but keep their corresponding labels in y-dir
             ax.tick_params(
                 axis='y',          # changes apply to the x-axis
@@ -102,12 +102,12 @@ class Board:
 
             ax.set_xticks(ticks=locs, labels=x_labels, minor=True)
             ax.set_yticks(ticks=locs, labels=range(1,9), minor=True)
-    
+
             ax.grid(color='black', linestyle='-', linewidth=1)
             #ax.set_facecolor('#E1F8DC')
             ax.set_facecolor('#117950')
             ax.yaxis.set_inverted(True)
-            
+
             plt.show()
 
         else:
@@ -120,4 +120,3 @@ if __name__ == "__main__":
     board.place_pawn(1,1,1)
     print(board.display())
     print(board.display('matplotlib'))
-    
