@@ -1,3 +1,4 @@
+from .Direction import Direction
 from .Player import Player
 from .Board import Board
 import numpy as np
@@ -40,7 +41,7 @@ class Othello:
         possible_move = [move for move in possible_move if current_board[move[0],move[1]]==-1] # Filter only the empty case
         return possible_move
 
-    def is_terminated(self): 
+    def is_terminated(self):
         """ Check if the game is done (no more pawns or legal moves for both players).
         Output:
             True if the game is done, False otherwise
@@ -120,12 +121,11 @@ class Othello:
         if self.board[r, c].pawn:
             return False
 
-        direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
-
         if id_player == None:
             id_player =  self.players_turn # Get whose turn it is
 
-        for dr, dc in direction:
+        for direction in Direction:
+            dr, dc = direction.value
             nr, nc = r+dr, c+dc
             if not (0 <= nr + dr <= 7 and 0 <= nc + dc <= 7):
                 continue
