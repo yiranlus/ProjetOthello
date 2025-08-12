@@ -28,9 +28,8 @@ player1 = HumanPlayer(0, "Alexis")
 player2 = HumanPlayer(1, "Alicia")
 game = Othello([player1, player2])
 
-#game.board = board
-#game.players_turn = 1
-
+game.board = board
+game.players_turn = 1
 game.start_game()
 
 #game.board.display()
