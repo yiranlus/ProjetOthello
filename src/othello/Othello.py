@@ -67,16 +67,18 @@ class Othello:
                         if self.board[neighbor_r,neighbor_c].pawn.color == id_opponent:
                             potential_move.append([(neighbor_r,neighbor_c),(r,c)])
         else:
-            if not(potential_move):
+            if not(requested_move):
                 return False
             else:
                 for neighbor_r,neighbor_c,r,c in requested_move:
-                    if neighbor_r>0 and neighbor_c >0 and neighbor_r<7 and neighbor_c<7:
+                    new_r = neighbor_r + r 
+                    new_c = neighbor_c + c
+                    if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7:
                         if not(self.board[neighbor_r,neighbor_c].is_empty):
                             if self.board[neighbor_r,neighbor_c].pawn.color == id_player:
                                 return True
                             else:
-                                potential_move.append([(neighbor_r,neighbor_c),(r,c)])  
+                                potential_move.append([(new_r,new_c),(r,c)])  
         return self.legal_moves(potential_move,check_start)
 
 
