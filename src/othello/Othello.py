@@ -1,18 +1,21 @@
-import Player
-import Board
+from Player import Player
+from Board import Board
 import numpy as np
+from HumanPlayer import HumanPlayer
 class Othello:
 
-    def __init__(self):
+    def __init__(self,Player):
         """create the game master of Othello`.
 
         Args:
+
             Player (list of class Player): list containing the info of the 2 players
         """
         self.players_turn = 0 # Black (0) or White (1) to play
         self.number_pawns = 60 # Number of pawns remaining off the board
         self.board = Board()
-        self.players = [Player(0),Player(1)]
+
+        self.players = [Player[0],Player[1]]
 
 
     def get_possible_moves(self,id_player):
@@ -28,13 +31,13 @@ class Othello:
         current_board = np.zeros((8,8),int) -1
         for row in range(8):# Check all the case of the board
             for col in range(8):
-                if not(self.board[row,col].is_empty): # if there is a pawn on the case
-                    current_board[row,col] =  self.board[row,col].pawn.color # Assign color id to current_board
+                if not(self.board.board[row,col].is_empty): # if there is a pawn on the case
+                    current_board[row,col] =  self.board.board[row,col].pawn.color # Assign color id to current_board
         opponent_pos = np.argwhere(current_board==id_opponent) # Get psoition of opponent's pawns
         possible_move = []
         for opps in opponent_pos: # Get all the neighbors of the opponent's pawns
             possible_move+=[[opps[0]+r,opps[1]+c] for r,c in direction ]
-        possible_move = [move for move in possible_move if current_board[move]==-1] # Filter only the empty case
+        possible_move = [move for move in possible_move if current_board[move[0],move[1]]==-1] # Filter only the empty case
         return possible_move
     
     def is_terminated(self):   # WIP
@@ -43,9 +46,7 @@ class Othello:
             True if the game is done, False otherwise
         """     
         direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
-        if self.number_pawns>0: # If there are still pawns to be played
-            current_board = np.zeros((8,8),int) -1
-            
+        if self.number_pawns>0: # If there are still pawns to be played            
             possible_move_black = self.get_possible_moves(0)
             possible_move_white = self.get_possible_moves(1)
             legal_move_white = False
@@ -55,7 +56,7 @@ class Othello:
                     break
             legal_move_black = False
             for move in possible_move_black: # Check the legality of all black moves
-                if self.legal_moves(moveid_player=0):
+                if self.legal_moves(move,id_player=0):
                     legal_move_black = True # If legal set True and stop the loop
                     break
             if legal_move_black * legal_move_white == False: #No legal move for both players
@@ -75,8 +76,8 @@ class Othello:
         board = self.board 
         for row in range(8):
             for col in range(8):
-                if ~board[row,col].is_empty:
-                    count[board[row,col].pawn.color] += 1
+                if not(board.board[row,col].is_empty):
+                    count[board.board[row,col].pawn.color] += 1
         id_winner = count.index(max(count))
         name_winner = self.players[id_winner].name
         color_winner = self.players[id_winner].color
@@ -119,17 +120,19 @@ class Othello:
                 neighbor_r = row + r
                 neighbor_c = col + r
                 if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
-                    if not(self.board[neighbor_r,neighbor_c].is_empty): # if there is a pawn on the case
-                        if self.board[neighbor_r,neighbor_c].pawn.color == id_opponent: # if the color of the pawn is the opponent's
+                    if not(self.board.board[neighbor_r,neighbor_c].is_empty): # if there is a pawn on the case
+                        if self.board.board[neighbor_r,neighbor_c].pawn.color == id_opponent: # if the color of the pawn is the opponent's
                             potential_move.append([(neighbor_r,neighbor_c),(r,c)]) # Add to potential moves
         else: # For all runs that are not the first one
             if not(requested_move): # If there is no more direction to explore
                 return False # Move is illegal
             else: # If requested_move is not empty
-                for neighbor_r,neighbor_c,r,c in requested_move:
+                for neighbor,direct in requested_move:
+                    neighbor_r,neighbor_c = neighbor[0],neighbor[1]
+                    r,c = direct[0],direct[1]
                     if neighbor_r>=0 and neighbor_c >=0 and neighbor_r<=7 and neighbor_c<=7: # if case within the board
-                        if not(self.board[neighbor_r,neighbor_c].is_empty):  # if there is a pawn on the case
-                            if self.board[neighbor_r,neighbor_c].pawn.color == id_player: # if the color of the pawn is the player's
+                        if not(self.board.board[neighbor_r,neighbor_c].is_empty):  # if there is a pawn on the case
+                            if self.board.board[neighbor_r,neighbor_c].pawn.color == id_player: # if the color of the pawn is the player's
                                 return True # This move is legal
                             else:  # if the color of the pawn is the opponent's
                                 new_r = neighbor_r + r # Update the row id
@@ -140,4 +143,12 @@ class Othello:
 
 
 if __name__ == "__main__":
-    pass
+    player1 = HumanPlayer(0, "Alexis")
+    player2 = HumanPlayer(1, "Alicia")
+    players = [player1,player2]
+    game = Othello(players)
+    print(game.is_terminated())
+    
+
+
+
