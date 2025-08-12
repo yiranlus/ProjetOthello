@@ -1,4 +1,4 @@
-from Player import Player
+from .Player import Player
 
 class HumanPlayer(Player):
     def __init__(self, color, name=""):
