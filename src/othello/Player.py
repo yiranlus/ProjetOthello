@@ -1,7 +1,9 @@
+from .Color import Color
+
 class Player:
-    def __init__(self, color, name=""):
-        self._color = color
-        self._name = name
+    def __init__(self, color: Color, name: str=""):
+        self._color: Color = color
+        self._name: str = name
 
     @property
     def color(self):

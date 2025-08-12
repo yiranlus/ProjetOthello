@@ -1,12 +1,13 @@
+from .Color import Color
 from .Player import Player
 
 class HumanPlayer(Player):
-    def __init__(self, color, name=""):
+    def __init__(self, color: Color, name: str=""):
         super().__init__(color, name)
 
     def make_move(self):
-        color_name = "black" if self.color == 0 else "white"
-        circle = "\u2b24" if self.color == 0 else "\u25ef"
+        color_name = "black" if self.color == Color.BLACK else "white"
+        circle = "\u2b24" if self.color == Color.BLACK else "\u25ef"
 
         is_good_coord = False
 
