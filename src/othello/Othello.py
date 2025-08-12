@@ -46,7 +46,6 @@ class Othello:
         Output:
             True if the game is done, False otherwise
         """
-        self.board.display()
         direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
         if self.number_pawns>0: # If there are still pawns to be played
             possible_move_black = self.get_possible_moves(0)
