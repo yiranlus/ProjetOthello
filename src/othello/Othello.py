@@ -14,7 +14,6 @@ class Othello:
             Player (list of class Player): list containing the info of the 2 players
         """
         self.players_turn = 0 # Black (0) or White (1) to play
-        self.number_pawns = 60 # Number of pawns remaining off the board
         self.board = Board()
 
         self.players = [Player[0],Player[1]]
@@ -29,17 +28,15 @@ class Othello:
             list of list [x,y] with the coordinates of possible moves for the player
         """
         id_opponent= (id_player +1)%2
-        current_board = np.zeros((8,8),int) -1
-        for row in range(8):# Check all the case of the board
-            for col in range(8):
-                if not(self.board.board[row,col].is_empty): # if there is a pawn on the case
-                    current_board[row,col] =  self.board.board[row,col].pawn.color # Assign color id to current_board
+        direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+        current_board = self.board.f_vec(self.board.board)
         opponent_pos = np.argwhere(current_board==id_opponent) # Get psoition of opponent's pawns
         possible_move = []
         for opps in opponent_pos: # Get all the neighbors of the opponent's pawns
             possible_move+=[[opps[0]+direct.value[0],opps[1]+direct.value[1]] for direct in Direction ]
         possible_move = [ [r,c] for r,c in possible_move if r>=0 and c>=0 and r<8 and c<8]
-        possible_move = [move for move in possible_move if current_board[move[0],move[1]]==-1] # Filter only the empty case
+        possible_move = [move for move in possible_move if current_board[move[0],move[1]]==None] # Filter only the empty case
         return possible_move
 
     def is_terminated(self): 
@@ -48,7 +45,7 @@ class Othello:
             True if the game is done, False otherwise
         """
         # self.board.display()
-        if self.number_pawns>0: # If there are still pawns to be played
+        if self.board.number_pawns >0: # If there are still pawns to be played
             possible_move_black = self.get_possible_moves(0)
             possible_move_white = self.get_possible_moves(1)
             legal_move_white = False
@@ -107,8 +104,8 @@ class Othello:
             valid_move = self.legal_moves(requested_move)
         self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
         self.board.update_board(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
-        self.number_pawns -= 1 # Update the number of pawns remaining off the board
         self.players_turn = (self.players_turn +1)%2 # Switch players turn
+
 
     def start_game(self):
         self.ask_players()

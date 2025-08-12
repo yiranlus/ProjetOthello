@@ -9,6 +9,7 @@ class Board:
     def __init__(self):
         self.rows = 8
         self.cols = 8
+        self.number_pawns = 60 
 
         # initialize empty board
         self.board = np.empty((self.rows, self.cols), dtype=Case)
@@ -22,12 +23,13 @@ class Board:
         self.board[4,3].pawn = Pawn(0)
         self.board[4,4].pawn = Pawn(1)
 
-        f = lambda x: x.pawn.color if x.pawn else np.nan
+        f = lambda x: x.pawn.color if x.pawn else None
         self.f_vec = np.vectorize(f)
 
 
     def place_pawn(self, r, c, color):
         self.board[r, c].pawn = Pawn(color)
+        self.number_pawns -= 1
 
 
     def update_board(self, r, c, color):
