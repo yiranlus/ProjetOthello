@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from .Pawn import Pawn
-from .Case import Case
+from Pawn import Pawn
+from Case import Case
 
 class Board:
     def __init__(self):
@@ -22,18 +22,75 @@ class Board:
         self.board[4,3].pawn = Pawn(0)
         self.board[4,4].pawn = Pawn(1)
 
+        f = lambda x: x.pawn.color if x.pawn else np.nan
+        self.f_vec = np.vectorize(f)
+
 
     def place_pawn(self, r, c, color):
         self.board[r, c].pawn = Pawn(color)
+
+    
+    def update_board(self, r, c, color):
+        vec_board = self.f_vec(self.board)
+        rows = [-1, 0, 1]
+        cols = [-1, 0, 1]
+
+        for row in rows:
+            for col in cols:
+                if (row == 0) & (col == 0):
+                    print('continue self')
+                    continue
+
+                if (r + row < 0) | (c + col < 0):
+                    print('continue negative')
+                    continue
+            
+                print(self.board[r + row, c + col].__dict__)
+                print(r+row)
+                if self.board[r + row, c + col].pawn is None:
+                    print('continue None')
+                    continue
+                elif self.board[r + row, c + col].pawn.color != color:
+                    self.flip_sandwiches(r, c, color, row, col)
+
+
+    def flip_sandwiches(self, r, c, color, row, col):
+        color_c = self.board[r + row, c + col].pawn.color
+        count = 0
+
+        idx_ls = []
+        while color_c != color:
+            count += 1
+
+            if self.board[r + row * count, c + col * count].pawn is None:
+                color_c = color
+                continue
+
+            if ((r + row * count < 0) | (r + row * count >= self.rows) |
+                (r + row * count < 0) | (r + row * count >= self.rows)):
+                color_c = color
+
+            if self.board[r + row * count, c + col * count].pawn.color != color:
+                idx_ls.append((r + row * count, c + col * count))
+                print(idx_ls)
+            elif self.board[r + row * count, c + col * count].pawn.color == color:
+                for idx in idx_ls:
+                    print(idx)
+                    print('in desired loop')
+                    r_idx = idx[0]
+                    c_idx = idx[1]
+                    self.board[r_idx, c_idx].pawn.flip()
+                color_c = color
+            else:
+                color_c = color
 
 
     def __getitem__(self, index):
         return self.board[index]
 
+
     def display(self, display_choice = 'console', extra=None):
         if display_choice == 'console':
-
-            # print(f_vec(self.board))
             print("  A B C D E F G H")
             for i in range(8):
                 print(i+1, end=" ")
@@ -53,10 +110,7 @@ class Board:
             x_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
 
-            f2 = lambda x: x.pawn.color if x.pawn else np.nan
-            f_vec2 = np.vectorize(f2)
-
-            vec_board = f_vec2(self.board)
+            vec_board = self.f_vec(self.board)
             if extra:
                 for extra_val in extra:
                     r = extra_val[0]
@@ -128,7 +182,16 @@ class Board:
 
 if __name__ == "__main__":
     board = Board()
-    board.place_pawn(3, 2, 1)
-    board.place_pawn(1,1,1)
-    board.display(extra=[(0,0), (2,2)])
-    # print(board.display('matplotlib'))
+    board.place_pawn(3, 5, 1)
+    board.update_board(3, 5, 1)
+    board.place_pawn(3, 6, 1)
+    extra = [(1,1),(2,4)]
+    #board.display()
+    #board.display('matplotlib', extra)
+    board.place_pawn(2, 5, 0)
+    board.update_board(2, 5, 0)
+    board.place_pawn(4, 5, 0)
+    board.update_board(4, 5, 0)
+    board.display()
+    board.display('matplotlib', extra)
+    
