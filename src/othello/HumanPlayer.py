@@ -19,6 +19,8 @@ class HumanPlayer(Player):
                     exit(0)
                 if ord("A") <= ord(coord[0]) <= ord("H"):
                     c = ord(coord[0]) - ord("A")
+                elif ord("a") <= ord(coord[0]) <= ord("h"):
+                    c = ord(coord[0]) - ord("a")
                 else:
                     raise ValueError()
                 if ord("1") <= ord(coord[1]) <= ord("8"):
