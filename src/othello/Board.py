@@ -43,7 +43,7 @@ class Board:
                         print("\u25ef", end=" ")
                 print()
 
-
+        elif display_choice == 'matplotlib':
             x_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
         
@@ -58,7 +58,7 @@ class Board:
 
             # plot on the figure and adjust the axis labels
             fig, ax = plt.subplots()
-            ax.scatter(rows + 0.5, cols + 0.5,
+            ax.scatter(cols + 0.5, rows + 0.5,
                        s=500,
                        c = f_vec2(self.board)[rows,cols],
                        cmap=mpl.cm.Greys_r,
@@ -109,6 +109,9 @@ class Board:
             ax.yaxis.set_inverted(True)
             
             plt.show()
+
+        else:
+            return ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
 
 
 if __name__ == "__main__":
