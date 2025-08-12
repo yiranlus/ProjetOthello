@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from .Pawn import Pawn
-from .Case import Case
+from Pawn import Pawn
+from Case import Case
 
 class Board:
     def __init__(self):
@@ -29,12 +29,20 @@ class Board:
     
     def display(self, display_choice = 'console'):
         if display_choice == 'console':
-            f = lambda x: x.pawn.color if x.pawn else np.nan
-            f_vec = np.vectorize(f)
 
-            print(f_vec(self.board))
-    
-        if display_choice == 'matplotlib':
+            # print(f_vec(self.board))
+            print(" A B C D E F G H")
+            for i in range(8):
+                print(i+1, end="")
+                for j in range(8):
+                    if not self.board[i,j].pawn:
+                        print(" ", end=" ")
+                    elif self.board[i,j].pawn.color == 0:
+                        print("\u2b24", end=" ")
+                    elif self.board[i,j].pawn.color == 1:
+                        print("\u25ef", end=" ")
+                print()
+
 
             x_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
@@ -108,5 +116,5 @@ if __name__ == "__main__":
     board.place_pawn(3, 2, 1)
     board.place_pawn(1,1,1)
     print(board.display())
-    print(board.display_graphic())
+    print(board.display('matplotlib'))
     
