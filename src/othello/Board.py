@@ -36,7 +36,10 @@ class Board:
                 print(i+1, end=" ")
                 for j in range(8):
                     if not self.board[i,j].pawn:
-                        print(" ", end=" ")
+                        if (i,j) in extra:
+                            print("*", end=" ")
+                        else:
+                            print(" ", end=" ")
                     elif self.board[i,j].pawn.color == 0:
                         print("\u2b24", end=" ")
                     elif self.board[i,j].pawn.color == 1:
