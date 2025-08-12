@@ -37,18 +37,13 @@ class Board:
         for row in rows:
             for col in cols:
                 if (row == 0) & (col == 0):
-                    #print('continue self')
                     continue
 
                 if ((r + row < 0) | (r + row >= self.rows) |
-                    (r + row < 0) | (r + row >= self.rows)):
-                    #print('continue negative')
+                    (c + col < 0) | (c + col >= self.cols)):
                     continue
             
-                #print(self.board[r + row, c + col].__dict__)
-                #print(r+row)
                 if self.board[r + row, c + col].pawn is None:
-                    #print('continue None')
                     continue
                 elif self.board[r + row, c + col].pawn.color != color:
                     self.flip_sandwiches(r, c, color, row, col)
@@ -72,11 +67,9 @@ class Board:
 
             if self.board[r + row * count, c + col * count].pawn.color != color:
                 idx_ls.append((r + row * count, c + col * count))
-                #print(idx_ls)
+
             elif self.board[r + row * count, c + col * count].pawn.color == color:
                 for idx in idx_ls:
-                    #print(idx)
-                    #print('in desired loop')
                     r_idx = idx[0]
                     c_idx = idx[1]
                     self.board[r_idx, c_idx].pawn.flip()
