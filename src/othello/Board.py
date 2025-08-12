@@ -17,17 +17,17 @@ class Board:
                 self.board[row, col] = Case()
 
         # initialize 4 center squares
-        self.board[3,3].pawn = Pawn(0)
-        self.board[3,4].pawn = Pawn(1)
-        self.board[4,3].pawn = Pawn(1)
-        self.board[4,4].pawn = Pawn(0)
+        self.board[3,3].pawn = Pawn(1)
+        self.board[3,4].pawn = Pawn(0)
+        self.board[4,3].pawn = Pawn(0)
+        self.board[4,4].pawn = Pawn(1)
 
 
     def place_pawn(self, r, c, color):
         self.board[r, c].pawn = Pawn(color)
 
     
-    def display(self, display_choice = 'console'):
+    def display(self, display_choice = 'console', extra=None):
         if display_choice == 'console':
 
             # print(f_vec(self.board))
@@ -50,6 +50,13 @@ class Board:
             f2 = lambda x: x.pawn.color if x.pawn else np.nan
             f_vec2 = np.vectorize(f2)
 
+            vec_board = f_vec2(self.board)
+            if extra:
+                for extra_val in extra:
+                    r = extra_val[0]
+                    c = extra_val[1]
+                    vec_board[r, c] = 0.25
+
             # create 8 x 8 grid of all the indices
             nx, ny = (7, 7)
             x = np.linspace(0,nx,nx+1, dtype=int)
@@ -60,7 +67,7 @@ class Board:
             fig, ax = plt.subplots()
             ax.scatter(cols + 0.5, rows + 0.5,
                        s=500,
-                       c = f_vec2(self.board)[rows,cols],
+                       c = vec_board[rows,cols],
                        cmap=mpl.cm.Greys_r,
                        edgecolors='black')
 
@@ -104,7 +111,6 @@ class Board:
             ax.set_yticks(ticks=locs, labels=range(1,9), minor=True)
     
             ax.grid(color='black', linestyle='-', linewidth=1)
-            #ax.set_facecolor('#E1F8DC')
             ax.set_facecolor('#117950')
             ax.yaxis.set_inverted(True)
             
@@ -118,6 +124,7 @@ if __name__ == "__main__":
     board = Board()
     board.place_pawn(3, 2, 1)
     board.place_pawn(1,1,1)
-    print(board.display())
-    print(board.display('matplotlib'))
+    extra = [(1,1),(2,4)]
+    board.display()
+    board.display('matplotlib', extra)
     
