@@ -1,5 +1,5 @@
-from .Player import Player
-from .Board import Board
+from Player import Player
+from Board import Board
 import numpy as np
 
 class Othello:
@@ -41,11 +41,12 @@ class Othello:
         possible_move = [move for move in possible_move if current_board[move[0],move[1]]==-1] # Filter only the empty case
         return possible_move
 
-    def is_terminated(self):   # WIP
+    def is_terminated(self): 
         """ Check if the game is done (no more pawns or legal moves for both players).
         Output:
             True if the game is done, False otherwise
         """
+        # self.board.display()
         direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
         if self.number_pawns>0: # If there are still pawns to be played
             possible_move_black = self.get_possible_moves(0)
@@ -59,6 +60,12 @@ class Othello:
             for move in possible_move_black: # Check the legality of all black moves
                 if self.legal_moves(move,id_player=0):
                     legal_move_black = True # If legal set True and stop the loop
+            if self.players_turn == 0:
+                if legal_move_black == False:
+                    self.players_turn = 1
+            else:
+                if legal_move_white == False:
+                    self.players_turn = 0
             if legal_move_black + legal_move_white == False: #No legal move for both players
                 return True
             else: # If there are legal moves to be played by at least one player
