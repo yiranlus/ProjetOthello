@@ -40,7 +40,7 @@ class Board:
                 print(i+1, end=" ")
                 for j in range(8):
                     if not self.board[i,j].pawn:
-                        if (i,j) in extra:
+                        if extra and (i,j) in extra:
                             print("*", end=" ")
                         else:
                             print(" ", end=" ")
