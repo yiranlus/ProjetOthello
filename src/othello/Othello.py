@@ -100,6 +100,7 @@ class Othello:
             valid_move = self.legal_moves(requested_move)
             valid_move = self.legal_moves(requested_move)
         self.board.place_pawn(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
+        self.board.update_board(requested_move[0],requested_move[1],self.players_turn) # Place the pawn
         self.number_pawns -= 1 # Update the number of pawns remaining off the board
         self.players_turn = (self.players_turn +1)%2 # Switch players turn
 
