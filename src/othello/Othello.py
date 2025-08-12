@@ -37,7 +37,7 @@ class Othello:
         possible_move = []
         for opps in opponent_pos: # Get all the neighbors of the opponent's pawns
             possible_move+=[[opps[0]+r,opps[1]+c] for r,c in direction ]
-        possible_move = [ [r,c] for r,c in possible_move if r>0 and c>0 and r<8 and c<8]
+        possible_move = [ [r,c] for r,c in possible_move if r>=0 and c>=0 and r<8 and c<8]
         possible_move = [move for move in possible_move if current_board[move[0],move[1]]==-1] # Filter only the empty case
         return possible_move
 
