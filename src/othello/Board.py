@@ -27,7 +27,11 @@ class Board:
         self.board[r, c].pawn = Pawn(color)
 
 
-    def display(self, display_choice = 'console'):
+    def __getitem__(self, index):
+        return self.board[index]
+
+
+    def display(self, display_choice = 'console', extra=None):
         if display_choice == 'console':
 
             # print(f_vec(self.board))
