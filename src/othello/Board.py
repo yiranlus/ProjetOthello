@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from .Pawn import Pawn
-from .Case import Case
+from Pawn import Pawn
+from Case import Case
 
 class Board:
     def __init__(self):
