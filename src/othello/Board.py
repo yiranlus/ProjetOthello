@@ -23,7 +23,7 @@ class Board:
         self.board[4,3].pawn = Pawn(0)
         self.board[4,4].pawn = Pawn(1)
 
-        f = lambda x: x.pawn.color if x.pawn else np.nan
+        f = lambda x: x.pawn.color if x.pawn else None
         self.f_vec = np.vectorize(f)
 
 
