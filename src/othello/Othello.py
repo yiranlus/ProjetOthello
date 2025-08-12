@@ -4,12 +4,21 @@ import Board
 class Othello:
 
     def __init__(self):
-        self.players_turn = 0
-        self.number_pawns = 60
+        """create the game master of Othello`.
+
+        Args:
+            Player (list of class Player): list containing the info of the 2 players
+        """
+        self.players_turn = 0 # Black (0) or White (1) to play
+        self.number_pawns = 60 # Number of pawns remaining off the board
         self.board = Board()
         self.players = [Player(0),Player(1)]
 
-    def is_terminated(self):       
+    def is_terminated(self):  
+        """ Check if the game is done (no more pawns or legal moves for both players).
+        Output:
+            True if the game is done, False otherwise
+        """     
         if self.number_pawns>0:
             if self.legal_moves(0) * self.legal_moves(1) == False: #No legal move for both players
                 return True
@@ -19,6 +28,11 @@ class Othello:
             return True
     
     def get_winner(self):
+        """ Once the game is done count the number of pawns of given colors to
+            determine the winner.
+        Output:
+            Print the name of the winner
+        """   
         count = [0,0]
         board = self.board 
         for row in range(8):
@@ -32,6 +46,9 @@ class Othello:
                  
 
     def ask_players(self):
+        """ Ask players alternatively to make a move, accept it if 
+            it is legal and print the board.
+        """   
         self.board.print()
         requested_move = self.players[self.players_turn].make_move()
         valid_move = self.legal_move(requested_move)
@@ -82,5 +99,5 @@ class Othello:
         return self.legal_moves(potential_move,check_start)
 
 
-
-    
+if __name__ == "__main__":
+    pass
