@@ -1,5 +1,5 @@
-from Player import Player
-from Board import Board
+from .Player import Player
+from .Board import Board
 import numpy as np
 
 class Othello:

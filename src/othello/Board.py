@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-from Pawn import Pawn
-from Case import Case
+from .Pawn import Pawn
+from .Case import Case
 
 class Board:
     def __init__(self):
@@ -29,7 +29,7 @@ class Board:
     def place_pawn(self, r, c, color):
         self.board[r, c].pawn = Pawn(color)
 
-    
+
     def update_board(self, r, c, color):
         rows = [-1, 0, 1]
         cols = [-1, 0, 1]
@@ -44,7 +44,7 @@ class Board:
                     (r + row < 0) | (r + row >= self.rows)):
                     #print('continue negative')
                     continue
-            
+
                 #print(self.board[r + row, c + col].__dict__)
                 #print(r+row)
                 if self.board[r + row, c + col].pawn is None:
@@ -194,4 +194,4 @@ if __name__ == "__main__":
     board.update_board(4, 5, 0)
     board.display()
     board.display('matplotlib', extra)
-    
+
