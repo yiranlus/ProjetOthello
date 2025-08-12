@@ -1,5 +1,5 @@
-from Player import Player
-from Board import Board
+from .Player import Player
+from .Board import Board
 import numpy as np
 
 class Othello:
@@ -88,7 +88,8 @@ class Othello:
         id_winner = count.index(max(count))
         name_winner = self.players[id_winner].name
         color_winner = self.players[id_winner].color
-        return "The winner of the game is:"+name_winner+"("+color_winner+")"
+        colour = ["black","white"]
+        return "The winner of the game is: "+name_winner+" ("+colour[color_winner]+")"
 
 
     def ask_players(self):
@@ -113,7 +114,7 @@ class Othello:
         self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
-        self.get_winner()
+        print(self.get_winner())
 
 
     def legal_moves(self,requested_move,check_start=True,id_player=None): # Recurssive approach

@@ -30,8 +30,6 @@ game = Othello([player1, player2])
 
 game.board = board
 game.players_turn = 1
+game.start_game()
 
-while not game.is_terminated():
-    game.ask_players()
-
-game.board.display()
+#game.board.display()
