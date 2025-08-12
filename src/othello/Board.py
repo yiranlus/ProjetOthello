@@ -59,13 +59,14 @@ class Board:
         while color_c != color:
             count += 1
 
-            if self.board[r + row * count, c + col * count].pawn is None:
+            if ((r + row * count < 0) | (r + row * count >= self.rows) |
+                (c + col * count < 0) | (c + col * count >= self.cols)):
                 color_c = color
                 continue
 
-            if ((r + row * count < 0) | (r + row * count >= self.rows) |
-                (r + row * count < 0) | (r + row * count >= self.rows)):
+            if self.board[r + row * count, c + col * count].pawn is None:
                 color_c = color
+                continue
 
             if self.board[r + row * count, c + col * count].pawn.color != color:
                 idx_ls.append((r + row * count, c + col * count))
