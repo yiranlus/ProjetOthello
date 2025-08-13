@@ -1,4 +1,3 @@
-import numpy as np
 from othello.Color import Color
 
 board_arr = [
