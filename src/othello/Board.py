@@ -78,7 +78,7 @@ class Board:
                 color_c = color
 
 
-    def __getitem__(self, index):
+    def __getitem__(self, index) -> Case:
         return self.board[index]
 
 
