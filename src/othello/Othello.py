@@ -89,6 +89,7 @@ class Othello:
         self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
+        self.board.display(extra=self._possible_move)
         print(self.get_winner())
 
 
