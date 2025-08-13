@@ -1,4 +1,5 @@
 from enum import Enum
+
 class Direction(Enum):
     NORTH     = (-1,0)
     NORTHEAST = (-1,1)
@@ -8,6 +9,7 @@ class Direction(Enum):
     SOUTH     = (1,0)
     SOUTHEAST = (1,1)
     SOUTHWEST = (1,-1)
+
 if __name__ == "__main__":
     h = Direction.NORTH
     for direction in Direction:

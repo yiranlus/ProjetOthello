@@ -1,4 +1,6 @@
+from __future__ import annotations
 from enum import Enum
+
 class Color(Enum):
     WHITE = 1
     BLACK = 0
@@ -6,7 +8,12 @@ class Color(Enum):
     def __str__(self):
         return self.name.lower()
 
-    def switch(self):
+    def switch(self) -> Color:
+        """return the other color.
+
+        Returns:
+            Color: the other color.
+        """
         if self == Color.BLACK:
             return Color.WHITE
         return Color.BLACK

@@ -21,7 +21,17 @@ class Othello:
         self.players: list[Player] = [player_black, player_white]
         self._possible_move: list[tuple[int,int]] = []
 
-    def get_possible_moves(self, id_player):
+    def get_possible_moves(self, id_player: int) -> list[tuple[int, int]]:
+        """Get all the possible positions where the current player can play on
+        the board.
+
+        Args:
+            id_player (int): the ID of the player. Either 0 (the player who play
+            black) or 1 (the player who play the white).
+
+        Returns:
+            list[tuple[int, int]]: a list of positions in (row, col).
+        """
         possible_moves = [
             (i, j)
             for i in range(8)
@@ -32,10 +42,11 @@ class Othello:
         return possible_moves
 
 
-    def is_terminated(self):
+    def is_terminated(self) -> bool:
         """ Check if the game is done (no more pawns or legal moves for both players).
-        Output:
-            True if the game is done, False otherwise
+
+        Returns:
+            bool: True if the game is done, False otherwise
         """
         # self.board.display()
 
@@ -47,11 +58,12 @@ class Othello:
                 return False
         return True
 
-    def get_winner(self):
+    def get_winner(self) -> Player:
         """ Once the game is done count the number of pawns of given colors to
             determine the winner.
-        Output:
-            Print the name of the winner
+
+        Returns:
+            Player: Print the name of the winner
         """
         count = [0,0]
         board = self.board
@@ -60,16 +72,16 @@ class Othello:
                 if not(board.board[row,col].is_empty):
                     count[board.board[row,col].pawn.color.value] += 1
         id_winner = count.index(max(count))
-        name_winner = self.players[id_winner].name
-        color_winner = self.players[id_winner].color
-        return f"The winner of the game is: {name_winner} ({color_winner})"
+        return self.players[id_winner]
 
     def switch_player(self):
+        """Swith the player.
+        """
         self.players_turn = (self.players_turn + 1) % 2
 
     def ask_players(self):
-        """ Ask players alternatively to make a move, accept it if
-            it is legal and print the board.
+        """ Ask players alternatively to make a move, accept it if it is legal
+        and print the board.
         """
         self.board.display(extra=self._possible_move)
         current_player = self.players[self.players_turn]
@@ -85,15 +97,28 @@ class Othello:
 
 
     def start_game(self):
+        """Start the game.
+        """
         self.get_possible_moves(self.players_turn)
         self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
         self.board.display(extra=self._possible_move)
-        print(self.get_winner())
+        winner = self.get_winner()
+        return f"The winner of the game is: {winner.name} ({winner.color})"
 
 
-    def legal_moves(self, requested_move, id_player=None): # Recurssive approach
+    def legal_moves(self, requested_move: tuple[int, int], id_player=None):
+        """Check if the `requested_move` is valid to play.
+
+        Args:
+            requested_move (tuple[int, int]): the move from the user.
+            id_player (int, optional): The ID of the player, either 0 or 1.
+            Defaults to None.
+
+        Returns:
+            bool: True if the `requested_move` is valid, otherwise False.
+        """
         r, c = requested_move
         if self.board[r, c].pawn:
             return False

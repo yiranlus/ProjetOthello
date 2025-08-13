@@ -30,11 +30,25 @@ class Board:
 
 
     def place_pawn(self, r, c, color: Color):
+        """Place a pawn on the board.
+
+        Args:
+            r (int): the row position of the pawn
+            c (int): the column position of the pawn
+            color (Color): The color of the pawn
+        """
         self.board[r, c].pawn = Pawn(color)
         self.number_pawns -= 1
 
 
     def update_board(self, r, c, color: Color):
+        """Update the pawn after placing a pawn
+
+        Args:
+            r (int): the row position of the pawn
+            c (int): the column position of the pawn
+            color (Color): the color of the pawn
+        """
         for direction in Direction:
             dr, dc = direction.value
 
@@ -49,6 +63,15 @@ class Board:
 
 
     def flip_sandwiches(self, r, c, color, dr, dc):
+        """Flip the pawn based on the position and the direction.
+
+        Args:
+            r (int): the row position of the pawn
+            c (int): the column position of the pawn
+            color (Color): the color of the pawn
+            dr (int): the direction along the row axis
+            dc (int): the direction along the column axis
+        """
         color_c = self.board[r + dr, c + dc].pawn.color
         count = 0
 
@@ -79,10 +102,27 @@ class Board:
 
 
     def __getitem__(self, index) -> Case:
+        """Return the `Case` in the board with index `index`.
+
+        Args:
+            index (tuple[int, int]): the index to access the board.
+
+        Returns:
+            Case: The case at the `index` in the board.
+        """
         return self.board[index]
 
 
-    def display(self, display_choice = 'console', extra=None):
+    def display(self, display_choice='console', extra=None):
+        """Display the board on the screen.
+
+        Args:
+            display_choice (str, optional): where to display the board, either
+            "console" or "matplotlib". Defaults to 'console'.
+            extra (list[tuple[int,int]], optional): additional points to be
+            displayed on the screen. This can be used to show the player the
+            possible positions of the next pawn. Defaults to None.
+        """
         if display_choice == 'console':
             print("  A B C D E F G H")
             for i in range(8):
