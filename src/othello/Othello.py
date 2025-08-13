@@ -1,10 +1,8 @@
+from .Board import Board
 from .Color import Color
 from .Direction import Direction
 from .Player import Player
-from .Board import Board
-from .Direction import Direction
-from .Color import Color
-import numpy as np
+
 
 class Othello:
 
@@ -20,6 +18,7 @@ class Othello:
 
         self.players: list[Player] = [player_black, player_white]
         self._possible_move: list[tuple[int,int]] = []
+
 
     def get_possible_moves(self, id_player):
         possible_moves = [
@@ -47,6 +46,7 @@ class Othello:
                 return False
         return True
 
+
     def get_winner(self):
         """ Once the game is done count the number of pawns of given colors to
             determine the winner.
@@ -64,8 +64,10 @@ class Othello:
         color_winner = self.players[id_winner].color
         return f"The winner of the game is: {name_winner} ({color_winner})"
 
+
     def switch_player(self):
         self.players_turn = (self.players_turn + 1) % 2
+
 
     def ask_players(self):
         """ Ask players alternatively to make a move, accept it if
@@ -122,12 +124,6 @@ class Othello:
 
         return False
 
-if __name__ == "__main__":
-    from othello.HumanPlayer import HumanPlayer
 
-    player1 = HumanPlayer(Color.BLACK, "Alexis")
-    player2 = HumanPlayer(Color.WHITE, "Alicia")
-    players = [player1,player2]
-    game = Othello(player_black=player2, player_white=player1)
-    while not game.is_terminated():
-        game.ask_players()
+if __name__ == "__main__":
+    pass
