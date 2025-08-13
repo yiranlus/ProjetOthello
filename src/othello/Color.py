@@ -6,7 +6,8 @@ class Color(Enum):
     BLACK = 0
 
     def __str__(self):
-        return self.name.lower()
+        circle = "\u2b24" if self == Color.BLACK else "\u25ef"
+        return f"{self.name.lower()} {circle}"
 
     def switch(self) -> Color:
         """return the other color.

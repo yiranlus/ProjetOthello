@@ -65,10 +65,10 @@ class Othello:
         """
         count = [0,0]
         board = self.board
-        for row in range(8):
-            for col in range(8):
-                if not(board.board[row,col].is_empty):
-                    count[board.board[row,col].pawn.color.value] += 1
+        for r in range(8):
+            for c in range(8):
+                if not (board[r,c].is_empty):
+                    count[board[r,c].pawn.color.value] += 1
         id_winner = count.index(max(count))
         return self.players[id_winner]
 
@@ -100,12 +100,11 @@ class Othello:
         """Start the game.
         """
         self.get_possible_moves(self.players_turn)
-        self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
         self.board.display(extra=self._possible_move)
         winner = self.get_winner()
-        return f"The winner of the game is: {winner.name} ({winner.color})"
+        print(f"The winner of the game is: {winner.name} ({winner.color})")
 
 
     def legal_moves(self, requested_move: tuple[int, int], id_player=None):

@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+from typing import Optional
 
 from .Direction import Direction
 from .Color import Color
@@ -8,24 +9,23 @@ from .Pawn import Pawn
 from .Case import Case
 
 class Board:
-    def __init__(self):
+    def __init__(self, board_arr: Optional[np.ndarray]=None):
         self.rows = 8
         self.cols = 8
-        self.number_pawns = 60
 
         # initialize empty board
-        self.board = np.empty((self.rows, self.cols), dtype=Case)
-        for row in range(8):
-            for col in range(8):
-                self.board[row, col] = Case()
+        if board_arr is not None:
+            self._board = board_arr
+        else:
+            self._board = np.full((self.rows, self.cols), Case.EMPTY, dtype=int)
 
-        # initialize 4 center squares
-        self.board[3,3].pawn = Pawn(Color.WHITE)
-        self.board[3,4].pawn = Pawn(Color.BLACK)
-        self.board[4,3].pawn = Pawn(Color.BLACK)
-        self.board[4,4].pawn = Pawn(Color.WHITE)
+            # initialize 4 center squares
+            self._board[3,3] = Color.WHITE.value
+            self._board[3,4] = Color.BLACK.value
+            self._board[4,3] = Color.BLACK.value
+            self._board[4,4] = Color.WHITE.value
 
-        f = lambda x: x.pawn.color.value if x.pawn else -1
+        f = lambda x: x.pawn.color.value if x.pawn else Case.EMPTY
         self.f_vec = np.vectorize(f)
 
 
@@ -37,9 +37,7 @@ class Board:
             c (int): the column position of the pawn
             color (Color): The color of the pawn
         """
-        self.board[r, c].pawn = Pawn(color)
-        self.number_pawns -= 1
-
+        self._board[r, c] = color.value
 
     def update_board(self, r, c, color: Color):
         """Update the pawn after placing a pawn
@@ -56,9 +54,9 @@ class Board:
                 (c + dc < 0) | (c + dc >= self.cols)):
                 continue
 
-            if self.board[r + dr, c + dc].pawn is None:
+            if self._board[r + dr, c + dc] == Case.EMPTY:
                 continue
-            elif self.board[r + dr, c + dc].pawn.color != color:
+            elif self._board[r + dr, c + dc] != color.value:
                 self.flip_sandwiches(r, c, color, dr, dc)
 
 
@@ -72,34 +70,37 @@ class Board:
             dr (int): the direction along the row axis
             dc (int): the direction along the column axis
         """
-        color_c = self.board[r + dr, c + dc].pawn.color
+        color_c = self._board[r + dr, c + dc]
         count = 0
 
         idx_ls = []
-        while color_c != color:
+        while color_c != color.value:
             count += 1
 
             if ((r + dr * count < 0) | (r + dr * count >= self.rows) |
                 (c + dc * count < 0) | (c + dc * count >= self.cols)):
-                color_c = color
+                color_c = color.value
                 continue
 
-            if self.board[r + dr * count, c + dc * count].pawn is None:
-                color_c = color
+            if self._board[r + dr * count, c + dc * count] == Case.EMPTY:
+                color_c = color.value
                 continue
 
-            if self.board[r + dr * count, c + dc * count].pawn.color != color:
+            if self._board[r + dr * count, c + dc * count] != color.value:
                 idx_ls.append((r + dr * count, c + dc * count))
 
-            elif self.board[r + dr * count, c + dc * count].pawn.color == color:
+            elif self._board[r + dr * count, c + dc * count] == color.value:
                 for idx in idx_ls:
                     r_idx = idx[0]
                     c_idx = idx[1]
-                    self.board[r_idx, c_idx].pawn.flip()
-                color_c = color
+                    self._board[r_idx, c_idx] = (self._board[r_idx, c_idx] + 1) % 2
+                color_c = color.value
             else:
-                color_c = color
+                color_c = color.value
 
+    @property
+    def board_arr(self) -> np.ndarray:
+        return self._board
 
     def __getitem__(self, index) -> Case:
         """Return the `Case` in the board with index `index`.
@@ -110,7 +111,10 @@ class Board:
         Returns:
             Case: The case at the `index` in the board.
         """
-        return self.board[index]
+        if self._board[index] == Case.EMPTY:
+            return Case()
+        else:
+            return Case(pawn=Pawn(Color(self._board[index])))
 
 
     def display(self, display_choice='console', extra=None):
@@ -128,14 +132,14 @@ class Board:
             for i in range(8):
                 print(i+1, end=" ")
                 for j in range(8):
-                    if not self.board[i,j].pawn:
+                    if self._board[i,j] == Case.EMPTY:
                         if extra and (i,j) in extra:
                             print("*", end=" ")
                         else:
                             print(" ", end=" ")
-                    elif self.board[i,j].pawn.color == Color.BLACK:
+                    elif self._board[i,j] == Color.BLACK.value:
                         print("\u2b24", end=" ")
-                    elif self.board[i,j].pawn.color == Color.WHITE:
+                    elif self._board[i,j] == Color.WHITE.value:
                         print("\u25ef", end=" ")
                 print()
 
@@ -143,7 +147,8 @@ class Board:
             x_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
 
-            vec_board = self.f_vec(self.board)
+            # vec_board = self.f_vec(self.board)
+            vec_board = self._board
             if extra:
                 for extra_val in extra:
                     r = extra_val[0]
@@ -221,10 +226,10 @@ if __name__ == "__main__":
     extra = [(1,1),(2,4)]
     #board.display()
     #board.display('matplotlib', extra)
-    board.place_pawn(2, 5, Color.BLACK)
-    board.update_board(2, 5, Color.BLACK)
-    board.place_pawn(4, 5, Color.BLACK)
-    board.update_board(4, 5, Color.BLACK)
-    board.display()
-    board.display('matplotlib', extra)
+    # board.place_pawn(2, 5, Color.BLACK)
+    # board.update_board(2, 5, Color.BLACK)
+    # board.place_pawn(4, 5, Color.BLACK)
+    # board.update_board(4, 5, Color.BLACK)
+    board.display(extra=extra)
+    # board.display('matplotlib', extra)
 
