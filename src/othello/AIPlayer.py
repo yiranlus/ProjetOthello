@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 from .Color import Color
 from .Direction import Direction
@@ -12,9 +13,23 @@ class AIPlayer(Player):
         self._ref_board: Board
 
     def set_ref_board(self, board: Board):
+        """Set the reference board for AI to use.
+
+        Args:
+            board (Board): the board.
+        """
         self._ref_board = board
 
     def _get_possible_moves(self, board: Board, color: Color):
+        """Get possible moves from the board for `color`.
+
+        Args:
+            board (Board): the board.
+            color (Color): the color
+
+        Returns:
+            list[tuple[int,int]]: a list of possible move for `color`.
+        """
         possible_moves = [
             (i, j)
             for i in range(8)
@@ -24,7 +39,17 @@ class AIPlayer(Player):
         self._possible_move = possible_moves
         return possible_moves
 
-    def _legal_moves(self, board: Board, requested_move, color: Color): # Recurssive approach
+    def _legal_moves(self, board: Board, requested_move, color: Color):
+        """Check if the current move is valid.
+
+        Args:
+            board (Board): the board.
+            requested_move (tuple[int,int]): the position in (row, col).
+            color (Color): the color
+
+        Returns:
+            bool: True if the current position is valid, False otherwise.
+        """
         r, c = requested_move
         if board[r, c].pawn:
             return False
@@ -51,6 +76,14 @@ class AIPlayer(Player):
         return False
 
     def _calculate_score(self, board: Board):
+        """Calculate the score different between AI and another player.
+
+        Args:
+            board (Board): the board
+
+        Returns:
+            int: the score difference.
+        """
         score_self, score_opp = 0, 0
         for i in range(8):
             for j in range(8):
@@ -62,6 +95,19 @@ class AIPlayer(Player):
         return score_self - score_opp
 
     def _minimax(self, board: Board, move, color: Color, depth, maximizing) -> int:
+        """The minimax algorithm to get the best move from the current board.
+
+        Args:
+            board (Board): the board.
+            move (tuple[int,int]): the movement in (row, col).
+            color (Color): the color of the corrent movement.
+            depth (int): current depth of the algorithm
+            maximizing (bool): should the current step maximizing or minimizing
+            the value.
+
+        Returns:
+            int: _description_
+        """
         r, c = move
         board.place_pawn(r, c, color)
         board.update_board(r, c, color)
@@ -83,6 +129,15 @@ class AIPlayer(Player):
         return score_max
 
     def _get_best_move(self, max_depth=10):
+        """Return the best move.
+
+        Args:
+            max_depth (int, optional): the maximum depth to explore. Defaults
+            to 10.
+
+        Returns:
+            tuple[int,int]: a movement in (row, col).
+        """
         if not self._ref_board:
             print("The reference board is not set in AIPlayer.")
             exit(1)
