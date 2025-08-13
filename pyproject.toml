@@ -18,3 +18,6 @@ othello-cli = "othello:main_cli"
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["othello*"]
+
+[tool.setuptools.package-data]
+othello = ["py.typed"]
