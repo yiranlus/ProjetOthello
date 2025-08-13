@@ -1,6 +1,8 @@
 from .Direction import Direction
 from .Player import Player
 from .Board import Board
+from .Direction import Direction
+from .Color import Color
 import numpy as np
 
 class Othello:
@@ -33,7 +35,7 @@ class Othello:
         opponent_pos = np.argwhere(current_board==id_opponent) # Get psoition of opponent's pawns
         possible_move = []
         for opps in opponent_pos: # Get all the neighbors of the opponent's pawns
-            possible_move+=[[opps[0]+r,opps[1]+c] for r,c in direction ]
+            possible_move+=[[opps[0]+direct.value[0],opps[1]+direct.value[1]] for direct in Direction ]
         possible_move = [ [r,c] for r,c in possible_move if r>=0 and c>=0 and r<8 and c<8]
         possible_move = [move for move in possible_move if current_board[move[0],move[1]]==None] # Filter only the empty case
         return possible_move
@@ -44,7 +46,6 @@ class Othello:
             True if the game is done, False otherwise
         """
         # self.board.display()
-        direction = [(-1, 0), (1, 0), (0, -1), (0, 1),(-1, -1), (-1, 1), (1, -1), (1, 1)]
         if self.board.number_pawns >0: # If there are still pawns to be played
             possible_move_black = self.get_possible_moves(0)
             possible_move_white = self.get_possible_moves(1)
@@ -144,7 +145,7 @@ class Othello:
         return False
 
 if __name__ == "__main__":
-    from HumanPlayer import HumanPlayer
+    from .HumanPlayer import HumanPlayer
 
     player1 = HumanPlayer(0, "Alexis")
     player2 = HumanPlayer(1, "Alicia")

@@ -8,3 +8,9 @@ class Direction(Enum):
     SOUTH = (1,0)
     SOUTHEAST = (1,1)
     SOUTHWEST = (1,-1)
+if __name__ == "__main__":
+    h = Direction.NORTH
+    for r,c in Direction.value:
+        #print("name:",name)
+
+        print("val:",r)
