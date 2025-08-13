@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
+from .Direction import Direction
 from .Color import Color
 from .Pawn import Pawn
 from .Case import Case
@@ -34,47 +35,40 @@ class Board:
 
 
     def update_board(self, r, c, color: Color):
-        rows = [-1, 0, 1]
-        cols = [-1, 0, 1]
+        for direction in Direction:
+            dr, dc = direction.value
 
-        for row in rows:
-            for col in cols:
-                if (row == 0) & (col == 0):
-                    continue
+            if ((r + dr < 0) | (r + dr >= self.rows) |
+                (c + dc < 0) | (c + dc >= self.cols)):
+                continue
 
-                if ((r + row < 0) | (r + row >= self.rows) |
-                    (c + col < 0) | (c + col >= self.cols)):
-                    continue
-
-                #print(self.board[r + row, c + col].__dict__)
-                #print(r+row)
-                if self.board[r + row, c + col].pawn is None:
-                    continue
-                elif self.board[r + row, c + col].pawn.color != color:
-                    self.flip_sandwiches(r, c, color, row, col)
+            if self.board[r + dr, c + dc].pawn is None:
+                continue
+            elif self.board[r + dr, c + dc].pawn.color != color:
+                self.flip_sandwiches(r, c, color, dr, dc)
 
 
-    def flip_sandwiches(self, r, c, color, row, col):
-        color_c = self.board[r + row, c + col].pawn.color
+    def flip_sandwiches(self, r, c, color, dr, dc):
+        color_c = self.board[r + dr, c + dc].pawn.color
         count = 0
 
         idx_ls = []
         while color_c != color:
             count += 1
 
-            if ((r + row * count < 0) | (r + row * count >= self.rows) |
-                (c + col * count < 0) | (c + col * count >= self.cols)):
+            if ((r + dr * count < 0) | (r + dr * count >= self.rows) |
+                (c + dc * count < 0) | (c + dc * count >= self.cols)):
                 color_c = color
                 continue
 
-            if self.board[r + row * count, c + col * count].pawn is None:
+            if self.board[r + dr * count, c + dc * count].pawn is None:
                 color_c = color
                 continue
 
-            if self.board[r + row * count, c + col * count].pawn.color != color:
-                idx_ls.append((r + row * count, c + col * count))
+            if self.board[r + dr * count, c + dc * count].pawn.color != color:
+                idx_ls.append((r + dr * count, c + dc * count))
 
-            elif self.board[r + row * count, c + col * count].pawn.color == color:
+            elif self.board[r + dr * count, c + dc * count].pawn.color == color:
                 for idx in idx_ls:
                     r_idx = idx[0]
                     c_idx = idx[1]
