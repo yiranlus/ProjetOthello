@@ -1,10 +1,8 @@
+from .Board import Board
 from .Color import Color
 from .Direction import Direction
 from .Player import Player
-from .Board import Board
-from .Direction import Direction
-from .Color import Color
-import numpy as np
+
 
 class Othello:
 
@@ -74,10 +72,12 @@ class Othello:
         id_winner = count.index(max(count))
         return self.players[id_winner]
 
+
     def switch_player(self):
         """Swith the player.
         """
         self.players_turn = (self.players_turn + 1) % 2
+
 
     def ask_players(self):
         """ Ask players alternatively to make a move, accept it if it is legal
@@ -147,12 +147,6 @@ class Othello:
 
         return False
 
-if __name__ == "__main__":
-    from othello.HumanPlayer import HumanPlayer
 
-    player1 = HumanPlayer(Color.BLACK, "Alexis")
-    player2 = HumanPlayer(Color.WHITE, "Alicia")
-    players = [player1,player2]
-    game = Othello(player_black=player2, player_white=player1)
-    while not game.is_terminated():
-        game.ask_players()
+if __name__ == "__main__":
+    pass
