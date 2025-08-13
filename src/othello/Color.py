@@ -6,7 +6,13 @@ class Color(Enum):
     def __str__(self):
         return self.name.lower()
 
+    def switch(self):
+        if self == Color.BLACK:
+            return Color.WHITE
+        return Color.BLACK
+
 if __name__ == "__main__":
     c = Color.BLACK
 
     print(c)
+    print(c.switch())
