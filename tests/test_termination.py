@@ -1,4 +1,4 @@
-import numpy as np
+from othello.Color import Color
 
 board_arr = [
     [ 0,  0,  0,  0,  0,  0,  0,  0],
@@ -20,13 +20,16 @@ board = Board()
 for i in range(8):
     for j in range(8):
         if board_arr[i][j] != -1:
-            board[i,j].pawn = Pawn(board_arr[i][j])
+            if board_arr[i][j] == 0:
+                board[i,j].pawn = Pawn(Color.BLACK)
+            else:
+                board[i,j].pawn = Pawn(Color.WHITE)
 
 # board.display()
 
-player1 = HumanPlayer(0, "Alexis")
-player2 = HumanPlayer(1, "Alicia")
-game = Othello([player1, player2])
+player1 = HumanPlayer(Color.BLACK, "Alexis")
+player2 = HumanPlayer(Color.WHITE, "Alicia")
+game = Othello(player1, player2)
 
 #game.board = board
 game.players_turn = 1

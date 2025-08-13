@@ -6,7 +6,6 @@ class HumanPlayer(Player):
         super().__init__(color, name)
 
     def make_move(self):
-        color_name = "black" if self.color == Color.BLACK else "white"
         circle = "\u2b24" if self.color == Color.BLACK else "\u25ef"
 
         is_good_coord = False
@@ -14,12 +13,14 @@ class HumanPlayer(Player):
         r, c = 0, 0
         while not is_good_coord:
             try:
-                coord = input(f"Your movement ({self.name}, {color_name} {circle}): ")
+                coord = input(f"Your movement ({self.name}, {self.color} {circle}): ")
                 if coord == "q":
                     print("Game terminated.")
                     exit(0)
                 if ord("A") <= ord(coord[0]) <= ord("H"):
                     c = ord(coord[0]) - ord("A")
+                elif ord("a") <= ord(coord[0]) <= ord("h"):
+                    c = ord(coord[0]) - ord("a")
                 else:
                     raise ValueError()
                 if ord("1") <= ord(coord[1]) <= ord("8"):

@@ -5,7 +5,7 @@ class Pawn:
         """create a pawn of `color`.
 
         Args:
-            color (int): 0 for black pawn, 1 for white pawn
+            color (Color)
         """
         self._color: Color = color
 
@@ -20,7 +20,7 @@ class Pawn:
             self._color = Color.BLACK
 
 if __name__ == "__main__":
-    p = Pawn(1)
+    p = Pawn(Color.BLACK)
     print("color of pawn:", p.color)
     p.flip()
     print("color of pawn:", p.color)
