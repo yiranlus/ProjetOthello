@@ -6,7 +6,7 @@ from .Player import Player
 
 class Othello:
 
-    def __init__(self, player_black: Player, player_white: Player):
+    def __init__(self, player_black: Player, player_white: Player, display_choice='console'):
         """create the game master of Othello`.
 
         Args:
@@ -18,6 +18,8 @@ class Othello:
 
         self.players: list[Player] = [player_black, player_white]
         self._possible_move: list[tuple[int,int]] = []
+        self.display_choice = display_choice
+
 
     def get_possible_moves(self, id_player: int) -> list[tuple[int, int]]:
         """Get all the possible positions where the current player can play on
@@ -83,7 +85,9 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if it is legal
         and print the board.
         """
-        self.board.display(extra=self._possible_move)
+        self.board.display(display_choice = self.display_choice, 
+                           extra=self._possible_move,
+                           player = self.players_turn)
         current_player = self.players[self.players_turn]
         requested_move = current_player.make_move()
         valid_move = self.legal_moves(requested_move)
@@ -103,7 +107,7 @@ class Othello:
         self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
-        self.board.display(extra=self._possible_move)
+        self.board.display(display_choice = self.display_choice, extra=self._possible_move)
         winner = self.get_winner()
         return f"The winner of the game is: {winner.name} ({winner.color})"
 

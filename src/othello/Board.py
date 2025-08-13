@@ -113,7 +113,8 @@ class Board:
         return self.board[index]
 
 
-    def display(self, display_choice='console', extra=None):
+    def display(self, display_choice='console', 
+                extra=None, player = 'Color.BLACK'):
         """Display the board on the screen.
 
         Args:
@@ -144,25 +145,42 @@ class Board:
             locs = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]
 
             vec_board = self.f_vec(self.board)
+            vec_board = vec_board.astype(float)
+            vec_board[vec_board < 0] = np.nan
+            
+            possible_moves = np.empty((self.rows, self.cols))
+
             if extra:
                 for extra_val in extra:
                     r = extra_val[0]
                     c = extra_val[1]
-                    vec_board[r, c] = 0.25
-
+                    possible_moves[r, c] = player
+            
             # create 8 x 8 grid of all the indices
             nx, ny = (7, 7)
             x = np.linspace(0,nx,nx+1, dtype=int)
             y = np.linspace(0,ny,ny+1, dtype=int)
             rows, cols = np.meshgrid(x, y, indexing='ij')
 
-            # plot on the figure and adjust the axis labels
-            fig, ax = plt.subplots()
+            # if not plt.fignum_exists(1):
+            plt.ion()
+      
+            fig, ax = plt.subplots(num=1)
+            ax.cla()  
+            
+            
             ax.scatter(cols + 0.5, rows + 0.5,
-                       s=500,
-                       c = vec_board[rows,cols],
-                       cmap=mpl.cm.Greys_r,
-                       edgecolors='black')
+                    s=250,
+                    c = possible_moves[rows,cols],
+                    cmap=mpl.cm.Greys_r,
+                    marker = 'x')
+                    #edgecolors='black')
+
+            ax.scatter(cols + 0.5, rows + 0.5,
+                    s=500,
+                    c = vec_board[rows,cols],
+                    cmap=mpl.cm.Greys_r,
+                    edgecolors='black')
 
             ax.set_xlim([0,8])
             ax.set_ylim([0,8])
@@ -207,10 +225,10 @@ class Board:
             ax.set_facecolor('#117950')
             ax.yaxis.set_inverted(True)
 
-            plt.show()
+            plt.show(block=False)
 
         else:
-            return ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
+            raise ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
 
 
 if __name__ == "__main__":
