@@ -32,7 +32,7 @@ player2 = HumanPlayer(Color.WHITE, "Alicia")
 game = Othello(player1, player2)
 
 #game.board = board
-game.players_turn = 1
+# game.players_turn = 0
 game.start_game()
 
 #game.board.display()

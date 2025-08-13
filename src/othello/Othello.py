@@ -65,7 +65,7 @@ class Othello:
         return f"The winner of the game is: {name_winner} ({color_winner})"
 
     def switch_player(self):
-        self.players_turn = (self.players_turn + 1) % 1
+        self.players_turn = (self.players_turn + 1) % 2
 
     def ask_players(self):
         """ Ask players alternatively to make a move, accept it if
