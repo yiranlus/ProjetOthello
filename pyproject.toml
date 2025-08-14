@@ -4,7 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "othello"
-version = "0.0.1"
+version = "1.0.0"
+authors = [
+  {name = "Yiran Lu"},
+  {name = "Alicia Clark"},
+  {name = "Mehdi Chouchane"},
+]
 readme = "README.md"
 requires-python = ">= 3.8"
 dependencies = [
