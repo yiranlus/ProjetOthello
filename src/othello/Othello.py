@@ -102,8 +102,6 @@ class Othello:
     def start_game(self):
         """Start the game.
         """
-        self.get_possible_moves(self.players_turn)
-        self.ask_players()
         while not(self.is_terminated()):
             self.ask_players()
         self.board.display(display_choice = self.display_choice, extra=self._possible_move)
