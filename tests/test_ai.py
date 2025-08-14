@@ -1,10 +1,17 @@
-from othello.HumanPlayer import HumanPlayer
 from othello.AIPlayer import AIPlayer
 from othello.Othello import Othello
 from othello.Color import Color
+from othello.Board import Board
 
-player1 = HumanPlayer(Color.BLACK, "Alexis")
-player_ai = AIPlayer(Color.WHITE, "AI")
-game = Othello(player1, player_ai)
-player_ai.set_ref_board(game.board)
+import numpy as np
+
+player1 = AIPlayer(Color.BLACK, "")
+player2 = AIPlayer(Color.WHITE, "")
+game = Othello(player1, player2, "matplotlib")
+player1.set_ref_board(game.board)
+player2.set_ref_board(game.board)
 game.start_game()
+
+# board = Board()
+# board.display('matplotlib')
+
