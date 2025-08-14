@@ -34,16 +34,15 @@ def parse_engine(s: str):
               "explore.")
 @click.option("--white-ai", type=str, is_flag=False, flag_value="ab3",
               help="The same as for --black-ai.")
-@click.option("-b", "--black", type=str, is_flag=False, flag_value="Player",
+@click.option("-b", "--black", type=str, is_flag=False, flag_value="",
               help="The name of the player who play the black.")
-@click.option("-w", "--white", type=str, is_flag=False, flag_value="Player",
+@click.option("-w", "--white", type=str, is_flag=False, flag_value="",
               help="The name of the player who play the white.")
 @click.option("-d", "--display", type=str, default="console",
               help="Where to display the board, either \"console\" or using" \
               "\"matplotlib\". Defaults to \"console\".")
 def main(black_ai, white_ai, black, white, display):
     player_black, player_white = None, None
-    print(black_ai, white_ai, black, white)
 
     n_human_player = 0
 
@@ -52,12 +51,18 @@ def main(black_ai, white_ai, black, white, display):
     if white_ai:
         player_white = AIPlayer(Color.WHITE, "AI", parse_engine(white_ai))
 
-    if black:
-        n_human_player += 1
-        player_black = HumanPlayer(Color.BLACK, black)
-    if white:
-        n_human_player += 1
-        player_white = HumanPlayer(Color.WHITE, white)
+    if black is not None:
+        if black == "":
+            n_human_player += 1
+            player_black = HumanPlayer(Color.BLACK, f"Player {n_human_player}")
+        else:
+            player_black = HumanPlayer(Color.BLACK, black)
+    if white is not None:
+        if white == "":
+            n_human_player += 1
+            player_white = HumanPlayer(Color.WHITE, f"Player {n_human_player}")
+        else:
+            player_white = HumanPlayer(Color.WHITE, white)
 
     if not player_black:
         n_human_player += 1
