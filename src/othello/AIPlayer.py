@@ -7,7 +7,7 @@ from .Player import Player
 from .Board import Board
 
 class AIPlayer(Player):
-    def __init__(self, color: Color, name="", engine="alpha-beta", max_depth=5):
+    def __init__(self, color: Color, name="", engine="alpha-beta", max_depth=3):
         super().__init__(color, name)
 
         self._ref_board: Board
