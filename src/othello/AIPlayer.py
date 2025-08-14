@@ -1,5 +1,6 @@
 import copy
 import numpy as np
+from random import shuffle
 
 from .Color import Color
 from .Direction import Direction
@@ -7,13 +8,13 @@ from .Player import Player
 from .Board import Board
 
 class AIPlayer(Player):
-    def __init__(self, color: Color, name="", engine="alpha_beta", max_depth=3):
+    def __init__(self, color: Color, name="", engine="alpha-beta", max_depth=2):
         super().__init__(color, name)
 
         self._ref_board: Board
         if engine == "minimax":
             self._engine = self._get_best_move_minimax
-        else:
+        elif engine == "alpha-beta":
             self._engine = self._get_best_move_alphabeta
         self._max_depth = max_depth
 
@@ -122,6 +123,7 @@ class AIPlayer(Player):
         possible_moves = self._get_possible_moves(board, color.switch())
         if not possible_moves:
             return self._calculate_score(board)
+        shuffle(possible_moves)
 
         score = -64 if maximizing else 64
         for (r, c) in possible_moves:
@@ -151,7 +153,9 @@ class AIPlayer(Player):
 
         score_self = -64
         next_move = (-1, -1)
-        for (r, c) in self._get_possible_moves_minimax(board, self.color):
+        possible_moves = self._get_possible_moves_minimax(board, self.color)
+        shuffle(possible_moves)
+        for (r, c) in possible_moves:
             board_copy = copy.deepcopy(board)
             score = self._minimax(board_copy, (r, c), self.color, max_depth, False)
             if score_self <= score:
@@ -183,6 +187,7 @@ class AIPlayer(Player):
         possible_moves = self._get_possible_moves(board, color.switch())
         if not possible_moves:
             return self._calculate_score(board)
+        shuffle(possible_moves)
 
         score = -64 if maximizing else 64
         for (r, c) in possible_moves:
@@ -219,7 +224,10 @@ class AIPlayer(Player):
         alpha, beta = -64, 64
         score_self = -64
         next_move = (-1, -1)
-        for (r, c) in self._get_possible_moves(board, self.color):
+        possible_moves = self._get_possible_moves(board, self.color)
+        shuffle(possible_moves)
+
+        for (r, c) in possible_moves:
             board_copy = copy.deepcopy(board)
             score = self._alphabeta(board_copy, (r, c), self.color, max_depth, False, alpha, beta)
             alpha = max(alpha, score)
