@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-
 from .Direction import Direction
 from .Color import Color
 from .Pawn import Pawn
@@ -12,7 +11,8 @@ class Board:
         self.rows = 8
         self.cols = 8
         self.number_pawns = 60
-
+        self.fig = None
+    
         # initialize empty board
         self.board = np.empty((self.rows, self.cols), dtype=Case)
         for row in range(8):
@@ -27,7 +27,8 @@ class Board:
 
         f = lambda x: x.pawn.color.value if x.pawn else -1
         self.f_vec = np.vectorize(f)
-
+    
+    
 
     def place_pawn(self, r, c, color: Color):
         """Place a pawn on the board.
@@ -165,7 +166,7 @@ class Board:
             # if not plt.fignum_exists(1):
             plt.ion()
       
-            fig, ax = plt.subplots(num=1)
+            self.fig, ax = plt.subplots(num=1)
             ax.cla()  
             
             
@@ -226,7 +227,7 @@ class Board:
             ax.yaxis.set_inverted(True)
 
             plt.show(block=False)
-
+            
         else:
             raise ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
 
