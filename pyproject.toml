@@ -16,7 +16,7 @@ dependencies = [
 Repository = "https://github.com/yiranlus/ProjetOthello"
 
 [project.scripts]
-othello-cli = "othello:cli.main"
+othello = "othello:cli.main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
