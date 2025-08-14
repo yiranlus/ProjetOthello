@@ -1,89 +1,72 @@
-import argparse
-import sys
+import click
 
-from .AIPlayer import AIPlayer
 from .Color import Color
+from .AIPlayer import AIPlayer
 from .HumanPlayer import HumanPlayer
 from .Othello import Othello
 
-def main():
-    parser = argparse.ArgumentParser(
-                    prog='Othello',
-                    description='Play the game Othello with two players.')
+def parse_engine(s: str):
+    """Parse the string to engine name and maximum depth
 
-    parser.add_argument('-wai', '--white-ai', type=str,
-                        help="White AI player, use '' for default engine, or mm "
-                             "for minimax or ab for alpha-beta engine. You can "
-                             "append a max depth after the engine name.")
-    parser.add_argument('-bai', '--black-ai', type=str, help="same as -wai")
-    parser.add_argument('-w', '--white', type=str)
-    parser.add_argument('-b', '--black', type=str)
-    parser.add_argument('-m', '--matplotlib', action="store_true")
-    #parser.add_argument('-init_b', '--initial_board')
+    Args:
+        s (str): the string to parse.
 
-    args = parser.parse_args()
-    # print(args)
-
-    num_inputs_players = 0
-    players_white = 0
-    players_black = 0
-
-    if args.white_ai is not None:
+    Returns:
+        (str, int): the engine name and the maximum depth.
+    """
+    engine = "alpha-beta"
+    max_depth = 3
+    if s.startswith("mm"):
+        engine = "minimax"
+        max_depth_s = s[2:]
+        max_depth = 3 if max_depth_s == "" else int(max_depth_s)
+    elif s.startswith("ab"):
         engine = "alpha-beta"
-        max_depth = 3
-        if args.white_ai.startswith("mm"):
-            engine = "minimax"
-            max_depth = args.white_ai[2:]
-            max_depth = 3 if max_depth == "" else int(max_depth)
-        elif args.white_ai.startswith("ab"):
-            engine = "alpha-beta"
-            max_depth = args.white_ai[2:]
-            max_depth = 3 if max_depth == "" else int(max_depth)
-        player_white = AIPlayer(Color.WHITE, "AI", engine, max_depth)
-        num_inputs_players += 1
-        players_white += 1
+        max_depth_s = s[2:]
+        max_depth = 3 if max_depth_s == "" else int(max_depth_s)
+    return engine, max_depth
 
-    if args.black_ai is not None:
-        if args.black_ai == "":
-            engine = "alpha-beta"
-            max_depth = 3
-        else:
-            if args.black_ai.startswith("mm"):
-                engine = "minimax"
-                max_depth = args.black_ai[2:]
-                max_depth = 3 if max_depth == "" else int(max_depth)
-            elif args.black_ai.startswith("ab"):
-                engine = "alpha-beta"
-                max_depth = args.black_ai[2:]
-                max_depth = 3 if max_depth == "" else int(max_depth)
-        player_black = AIPlayer(Color.BLACK, "AI", engine, max_depth)
-        num_inputs_players += 1
-        players_black += 1
+@click.command()
+@click.option("--black-ai", type=str, is_flag=False, flag_value="ab3",
+              help="AI will playing the black, default to ab3. Use \"ab\" for "
+              "alpha-beta algorithm or \"mm\" for minimax algorithm. A number "
+              "can be appended to specify the maximum depth the algorithm will"
+              "explore.")
+@click.option("--white-ai", type=str, is_flag=False, flag_value="ab3",
+              help="The same as for --black-ai.")
+@click.option("-b", "--black", type=str, is_flag=False, flag_value="Player",
+              help="The name of the player who play the black.")
+@click.option("-w", "--white", type=str, is_flag=False, flag_value="Player",
+              help="The name of the player who play the white.")
+@click.option("-d", "--display", type=str, default="console",
+              help="Where to display the board, either \"console\" or using" \
+              "\"matplotlib\". Defaults to \"console\".")
+def main(black_ai, white_ai, black, white, display):
+    player_black, player_white = None, None
+    print(black_ai, white_ai, black, white)
 
-    if args.white is not None:
-        player_white = HumanPlayer(Color.WHITE, args.white)
-        num_inputs_players += 1
-        players_white += 1
+    n_human_player = 0
 
-    if args.black is not None:
-        player_black = HumanPlayer(Color.BLACK, args.black)
-        num_inputs_players += 1
-        players_black += 1
+    if black_ai:
+        player_black = AIPlayer(Color.BLACK, "AI", parse_engine(black_ai))
+    if white_ai:
+        player_white = AIPlayer(Color.WHITE, "AI", parse_engine(white_ai))
 
-    if num_inputs_players == 0:
-        parser.print_help()
-        return 0
+    if black:
+        n_human_player += 1
+        player_black = HumanPlayer(Color.BLACK, black)
+    if white:
+        n_human_player += 1
+        player_white = HumanPlayer(Color.WHITE, white)
 
-    if num_inputs_players != 2 | (players_white > 1) | (players_black > 1):
-        print('Please choose both a black and a white player.')
-        return 1
+    if not player_black:
+        n_human_player += 1
+        player_black = HumanPlayer(Color.BLACK, f"Player {n_human_player}")
+    if not player_white:
+        n_human_player += 1
+        player_white = HumanPlayer(Color.WHITE, f"Player {n_human_player}")
 
-    if args.matplotlib:
-        display = "matplotlib"
-    else:
-        display = "console"
-
-    game = Othello(player_black=player_black, player_white=player_white, display_choice=display)
+    game = Othello(player_black, player_white, display)
     if isinstance(player_black, AIPlayer):
         player_black.set_ref_board(game.board)
     if isinstance(player_white, AIPlayer):
@@ -93,4 +76,6 @@ def main():
         game.start_game()
     except KeyboardInterrupt:
         print("quitting the game")
-        sys.exit(0)
+
+if __name__ == "__main__":
+    main()

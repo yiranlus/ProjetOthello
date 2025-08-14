@@ -13,7 +13,7 @@ class AIPlayer(Player):
         self._ref_board: Board
         if engine == "minimax":
             self._engine = self._get_best_move_minimax
-        elif engine == "alpha-beta":
+        else:
             self._engine = self._get_best_move_alphabeta
         self._max_depth = max_depth
         self._possible_move: list[tuple[int,int]] | list[list[int]]= []
