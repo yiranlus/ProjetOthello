@@ -7,10 +7,16 @@ from .Player import Player
 from .Board import Board
 
 class AIPlayer(Player):
-    def __init__(self, color: Color, name=""):
+    def __init__(self, color: Color, name="", engine="alpha_beta", max_depth=3):
         super().__init__(color, name)
 
         self._ref_board: Board
+        if engine == "minimax":
+            self._engine = self._get_best_move_minimax
+        else:
+            self._engine = self._get_best_move_alphabeta
+        self._max_depth = max_depth
+
 
     def set_ref_board(self, board: Board):
         """Set the reference board for AI to use.
@@ -127,12 +133,12 @@ class AIPlayer(Player):
                 score = min(score, self._minimax(board_copy, (r, c), color.switch(), depth-1, True))
         return score
 
-    def _get_best_move(self, max_depth=10):
+    def _get_best_move_minimax(self, max_depth=3):
         """Return the best move.
 
         Args:
             max_depth (int, optional): the maximum depth to explore. Defaults
-            to 10.
+            to 3.
 
         Returns:
             tuple[int,int]: a movement in (row, col).
@@ -145,7 +151,7 @@ class AIPlayer(Player):
 
         score_self = -64
         next_move = (-1, -1)
-        for (r, c) in self._get_possible_moves(board, self.color):
+        for (r, c) in self._get_possible_moves_minimax(board, self.color):
             board_copy = copy.deepcopy(board)
             score = self._minimax(board_copy, (r, c), self.color, max_depth, False)
             if score_self <= score:
@@ -153,6 +159,77 @@ class AIPlayer(Player):
                 next_move = (r, c)
         return next_move
 
+    def _alphabeta(self, board: Board, move, color: Color, depth, maximizing, alpha, beta) -> int:
+        """The minimax algorithm to get the best move from the current board.
+
+        Args:
+            board (Board): the board.
+            move (tuple[int,int]): the movement in (row, col).
+            color (Color): the color of the corrent movement.
+            depth (int): current depth of the algorithm
+            maximizing (bool): should the current step maximizing or minimizing
+            the value.
+            alpha (int): alpha
+            beta (int): beta
+
+        Returns:
+            int: _description_
+        """
+        r, c = move
+        board.place_pawn(r, c, color)
+        board.update_board(r, c, color)
+        if depth <= 0:
+            return self._calculate_score(board)
+        possible_moves = self._get_possible_moves(board, color.switch())
+        if not possible_moves:
+            return self._calculate_score(board)
+
+        score = -64 if maximizing else 64
+        for (r, c) in possible_moves:
+            if maximizing:
+                board_copy = copy.deepcopy(board)
+                score = max(score, self._minimax(board_copy, (r, c), color.switch(), depth-1, False))
+                if score >= beta:
+                    break
+                alpha = max(alpha, score)
+            else:
+                board_copy = copy.deepcopy(board)
+                score = min(score, self._minimax(board_copy, (r, c), color.switch(), depth-1, True))
+                if score <= alpha:
+                    break
+                beta = min(beta, score)
+        return score
+
+    def _get_best_move_alphabeta(self, max_depth=5):
+        """Return the best move.
+
+        Args:
+            max_depth (int, optional): the maximum depth to explore. Defaults
+            to 5.
+
+        Returns:
+            tuple[int,int]: a movement in (row, col).
+        """
+        if not self._ref_board:
+            print("The reference board is not set in AIPlayer.")
+            exit(1)
+
+        board = copy.deepcopy(self._ref_board)
+
+        alpha, beta = -64, 64
+        score_self = -64
+        next_move = (-1, -1)
+        for (r, c) in self._get_possible_moves(board, self.color):
+            board_copy = copy.deepcopy(board)
+            score = self._alphabeta(board_copy, (r, c), self.color, max_depth, False, alpha, beta)
+            alpha = max(alpha, score)
+            if score_self <= score:
+                if score >= beta:
+                    break
+                score_self = score
+                next_move = (r, c)
+        return next_move
+
     def make_move(self):
-        print("AI is thinking.")
-        return self._get_best_move(max_depth=3)
+        print(f"AI ({self.color}) is thinking.")
+        return self._engine(max_depth=3)
