@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from .AIPlayer import AIPlayer
 from .Color import Color
@@ -88,4 +89,8 @@ def main():
     if isinstance(player_white, AIPlayer):
         player_white.set_ref_board(game.board)
 
-    game.start_game()
+    try:
+        game.start_game()
+    except KeyboardInterrupt:
+        print("quitting the game")
+        sys.exit(0)
