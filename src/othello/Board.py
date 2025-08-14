@@ -227,6 +227,7 @@ class Board:
             ax.yaxis.set_inverted(True)
 
             plt.gca().set_aspect(1.0)
+            plt.pause(0.5)
             plt.show(block=False)
 
         else:
