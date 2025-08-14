@@ -24,22 +24,22 @@ def main():
     players_black = 0
 
     if args.white_ai:
-        player2 = AIPlayer(Color.WHITE, "White")
+        player_white = AIPlayer(Color.WHITE, "White")
         num_inputs_players += 1
         players_white += 1
 
     if args.black_ai:
-        player1 = AIPlayer(Color.BLACK, "Black")
+        player_black = AIPlayer(Color.BLACK, "Black")
         num_inputs_players += 1
         players_black += 1
 
     if args.white is not None:
-        player2 = HumanPlayer(Color.WHITE, args.white)
+        player_white = HumanPlayer(Color.WHITE, args.white)
         num_inputs_players += 1
         players_white += 1
 
     if args.black is not None:
-        player1 = HumanPlayer(Color.BLACK, args.black)
+        player_black = HumanPlayer(Color.BLACK, args.black)
         num_inputs_players += 1
         players_black += 1
 
@@ -51,7 +51,10 @@ def main():
         print('Please choose both a black and a white player.')
         return 1
 
-    players = [player1,player2]
-    game = Othello(player_black=player2, player_white=player1)
-    while not game.is_terminated():
-        game.ask_players()
+    game = Othello(player_black=player_black, player_white=player_white)
+    if isinstance(player_black, AIPlayer):
+        player_black.set_ref_board(game.board)
+    if isinstance(player_white, AIPlayer):
+        player_white.set_ref_board(game.board)
+
+    game.start_game()

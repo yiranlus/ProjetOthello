@@ -113,20 +113,19 @@ class AIPlayer(Player):
         board.update_board(r, c, color)
         if depth <= 0:
             return self._calculate_score(board)
+        possible_moves = self._get_possible_moves(board, color.switch())
+        if not possible_moves:
+            return self._calculate_score(board)
 
-        score_max = 0
-        for (r, c) in self._get_possible_moves(board, color.switch()):
+        score = -64 if maximizing else 64
+        for (r, c) in possible_moves:
             if maximizing:
                 board_copy = copy.deepcopy(board)
-                score = self._minimax(board_copy, (r, c), color.switch(), depth-1, False)
-                if score_max <= score:
-                    score_max = score
+                score = max(score, self._minimax(board_copy, (r, c), color.switch(), depth-1, False))
             else:
                 board_copy = copy.deepcopy(board)
-                score = self._minimax(board_copy, (r, c), color.switch(), depth-1, True)
-                if score_max >= score:
-                    score_max = score
-        return score_max
+                score = min(score, self._minimax(board_copy, (r, c), color.switch(), depth-1, True))
+        return score
 
     def _get_best_move(self, max_depth=10):
         """Return the best move.
@@ -144,7 +143,7 @@ class AIPlayer(Player):
 
         board = copy.deepcopy(self._ref_board)
 
-        score_self = 0
+        score_self = -64
         next_move = (-1, -1)
         for (r, c) in self._get_possible_moves(board, self.color):
             board_copy = copy.deepcopy(board)
