@@ -84,10 +84,11 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if it is legal
         and print the board.
         """
+        current_player = self.players[self.players_turn]
         self.board.display(display_choice = self.display_choice,
                            extra=self._possible_move,
-                           player = self.players_turn)
-        current_player = self.players[self.players_turn]
+                           player = self.players_turn,
+                           figtitle=f"{current_player.name} ({current_player.color})'s turn")
         requested_move = current_player.make_move(self.board.fig)
         valid_move = self.legal_moves(requested_move)
         while not(valid_move): # If the requested move is not legal

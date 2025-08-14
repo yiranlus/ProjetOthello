@@ -115,7 +115,8 @@ class Board:
 
 
     def display(self, display_choice='console',
-                extra=None, player = Color.WHITE):
+                extra=None, player = Color.WHITE,
+                figtitle=None):
         """Display the board on the screen.
 
         Args:
@@ -124,6 +125,8 @@ class Board:
             extra (list[tuple[int,int]], optional): additional points to be
             displayed on the screen. This can be used to show the player the
             possible positions of the next pawn. Defaults to None.
+            figtitle (str): a title to the figure. Only useful when display_choice
+            is "matplotlib".
         """
         if display_choice == 'console':
             print("  A B C D E F G H")
@@ -167,6 +170,8 @@ class Board:
             plt.ion()
 
             self.fig, ax = plt.subplots(num=1)
+            if figtitle:
+                self.fig.suptitle(figtitle)
             ax.cla()
 
 

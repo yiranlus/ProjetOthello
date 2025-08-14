@@ -39,14 +39,14 @@ def main():
             engine = "alpha-beta"
             max_depth = args.white_ai[2:]
             max_depth = 3 if max_depth == "" else int(max_depth)
-        player_white = AIPlayer(Color.WHITE, "White", engine, max_depth)
+        player_white = AIPlayer(Color.WHITE, "AI", engine, max_depth)
         num_inputs_players += 1
         players_white += 1
 
     if args.black_ai is not None:
         if args.black_ai == "":
             engine = "alpha-beta"
-            max_depth = 5
+            max_depth = 3
         else:
             if args.black_ai.startswith("mm"):
                 engine = "minimax"
@@ -56,7 +56,7 @@ def main():
                 engine = "alpha-beta"
                 max_depth = args.black_ai[2:]
                 max_depth = 3 if max_depth == "" else int(max_depth)
-        player_black = AIPlayer(Color.BLACK, "Black")
+        player_black = AIPlayer(Color.BLACK, "AI", engine, max_depth)
         num_inputs_players += 1
         players_black += 1
 
