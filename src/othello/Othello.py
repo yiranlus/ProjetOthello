@@ -66,11 +66,10 @@ class Othello:
             Player: Print the name of the winner
         """
         count = [0,0]
-        board = self.board
         for row in range(8):
             for col in range(8):
-                if not(board.board[row,col].is_empty):
-                    count[board.board[row,col].pawn.color.value] += 1
+                if not(self.board[row,col].is_empty):
+                    count[self.board[row,col].pawn.color.value] += 1
         id_winner = count.index(max(count))
         return self.players[id_winner]
 
@@ -85,7 +84,7 @@ class Othello:
         """ Ask players alternatively to make a move, accept it if it is legal
         and print the board.
         """
-        self.board.display(display_choice = self.display_choice, 
+        self.board.display(display_choice = self.display_choice,
                            extra=self._possible_move,
                            player = self.players_turn)
         current_player = self.players[self.players_turn]
@@ -109,7 +108,7 @@ class Othello:
             self.ask_players()
         self.board.display(display_choice = self.display_choice, extra=self._possible_move)
         winner = self.get_winner()
-        return f"The winner of the game is: {winner.name} ({winner.color})"
+        print(f"The winner of the game is: {winner.name} ({winner.color})")
 
 
     def legal_moves(self, requested_move: tuple[int, int], id_player=None):
