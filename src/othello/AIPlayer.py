@@ -7,7 +7,7 @@ from .Player import Player
 from .Board import Board
 
 class AIPlayer(Player):
-    def __init__(self, color: Color, name="", engine="alpha-beta", max_depth=2):
+    def __init__(self, color: Color, name="", engine="alpha-beta", max_depth=5):
         super().__init__(color, name)
 
         self._ref_board: Board
@@ -242,4 +242,4 @@ class AIPlayer(Player):
 
     def make_move(self, fig=None):
         print(f"AI ({self.color}) is thinking.")
-        return self._engine(max_depth=3)
+        return self._engine(max_depth=self._max_depth)
