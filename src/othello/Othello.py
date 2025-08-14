@@ -104,7 +104,7 @@ class Othello:
         """
         while not(self.is_terminated()):
             self.ask_players()
-        self.board.display(display_choice = self.display_choice, extra=self._possible_move)
+        self.board.display(display_choice = "console", extra=self._possible_move)
         winner = self.get_winner()
         print(f"The winner of the game is: {winner.name} ({winner.color})")
 
