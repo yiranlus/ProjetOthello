@@ -12,7 +12,7 @@ class Board:
         self.cols = 8
         self.number_pawns = 60
         self.fig = None
-    
+
         # initialize empty board
         self.board = np.empty((self.rows, self.cols), dtype=Case)
         for row in range(8):
@@ -27,8 +27,8 @@ class Board:
 
         f = lambda x: x.pawn.color.value if x.pawn else -1
         self.f_vec = np.vectorize(f)
-    
-    
+
+
 
     def place_pawn(self, r, c, color: Color):
         """Place a pawn on the board.
@@ -114,8 +114,8 @@ class Board:
         return self.board[index]
 
 
-    def display(self, display_choice='console', 
-                extra=None, player = 'Color.BLACK'):
+    def display(self, display_choice='console',
+                extra=None, player = Color.WHITE):
         """Display the board on the screen.
 
         Args:
@@ -148,7 +148,7 @@ class Board:
             vec_board = self.f_vec(self.board)
             vec_board = vec_board.astype(float)
             vec_board[vec_board < 0] = np.nan
-            
+
             possible_moves = np.empty((self.rows, self.cols))
 
             if extra:
@@ -156,7 +156,7 @@ class Board:
                     r = extra_val[0]
                     c = extra_val[1]
                     possible_moves[r, c] = player
-            
+
             # create 8 x 8 grid of all the indices
             nx, ny = (7, 7)
             x = np.linspace(0,nx,nx+1, dtype=int)
@@ -165,11 +165,11 @@ class Board:
 
             # if not plt.fignum_exists(1):
             plt.ion()
-      
+
             self.fig, ax = plt.subplots(num=1)
-            ax.cla()  
-            
-            
+            ax.cla()
+
+
             ax.scatter(cols + 0.5, rows + 0.5,
                     s=250,
                     c = possible_moves[rows,cols],
@@ -228,7 +228,7 @@ class Board:
 
             plt.gca().set_aspect(1.0)
             plt.show(block=False)
-            
+
         else:
             raise ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
 

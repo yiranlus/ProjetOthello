@@ -19,7 +19,7 @@ class Player:
     def name(self):
         return self._name
 
-    def make_move(self) -> tuple[int, int]:
+    def make_move(self, fig=None) -> tuple[int, int]:
         """Ask the player to make a move. Return a tuple of (row, column).
         """
         raise NotImplementedError()

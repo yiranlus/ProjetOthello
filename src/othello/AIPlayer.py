@@ -1,5 +1,4 @@
 import copy
-import numpy as np
 from random import shuffle
 
 from .Color import Color
@@ -17,6 +16,7 @@ class AIPlayer(Player):
         elif engine == "alpha-beta":
             self._engine = self._get_best_move_alphabeta
         self._max_depth = max_depth
+        self._possible_move: list[tuple[int,int]] | list[list[int]]= []
 
 
     def set_ref_board(self, board: Board):
@@ -149,11 +149,12 @@ class AIPlayer(Player):
             print("The reference board is not set in AIPlayer.")
             exit(1)
 
-        board = copy.deepcopy(self._ref_board)
+        board = Board()
+        board.board = copy.deepcopy(self._ref_board.board)
 
         score_self = -64
         next_move = (-1, -1)
-        possible_moves = self._get_possible_moves_minimax(board, self.color)
+        possible_moves = self._get_possible_moves(board, self.color)
         shuffle(possible_moves)
         for (r, c) in possible_moves:
             board_copy = copy.deepcopy(board)
@@ -219,7 +220,8 @@ class AIPlayer(Player):
             print("The reference board is not set in AIPlayer.")
             exit(1)
 
-        board = copy.deepcopy(self._ref_board)
+        board = Board()
+        board.board = copy.deepcopy(self._ref_board.board)
 
         alpha, beta = -64, 64
         score_self = -64
@@ -238,6 +240,6 @@ class AIPlayer(Player):
                 next_move = (r, c)
         return next_move
 
-    def make_move(self):
+    def make_move(self, fig=None):
         print(f"AI ({self.color}) is thinking.")
         return self._engine(max_depth=3)

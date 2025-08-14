@@ -28,18 +28,16 @@ def main():
     players_black = 0
 
     if args.white_ai is not None:
-        if args.white_ai == "":
+        engine = "alpha-beta"
+        max_depth = 5
+        if args.white_ai.startswith("mm"):
+            engine = "minimax"
+            max_depth = args.white_ai[2:]
+            max_depth = 3 if max_depth == "" else int(max_depth)
+        elif args.white_ai.startswith("ab"):
             engine = "alpha-beta"
-            max_depth = 5
-        else:
-            if args.white_ai.startswith("mm"):
-                engine = "minimax"
-                max_depth = args.white_ai[2:]
-                max_depth = 3 if max_depth == "" else int(max_depth)
-            elif args.white_ai.startswith("ab"):
-                engine = "alpha-beta"
-                max_depth = args.white_ai[2:]
-                max_depth = 5 if max_depth == "" else int(max_depth)
+            max_depth = args.white_ai[2:]
+            max_depth = 5 if max_depth == "" else int(max_depth)
         player_white = AIPlayer(Color.WHITE, "White", engine, max_depth)
         num_inputs_players += 1
         players_white += 1
