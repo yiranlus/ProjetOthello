@@ -1,24 +1,25 @@
+from .Color import Color
+
 class Pawn:
-    def __init__(self, color: int):
-        """create a pawn of `color`.
+    def __init__(self, color: Color):
+        """Create a pawn of `color`.
 
         Args:
-            color (int): 0 for black pawn, 1 for white pawn
+            color (Color)
         """
-        self._color = color
+        self._color: Color = color
 
     @property
     def color(self):
         return self._color
 
     def flip(self):
-        if self._color == 0:
-            self._color = 1
-        else:
-            self._color = 0
+        """Flip the color of the pawn.
+        """
+        self._color = self._color.switch()
 
 if __name__ == "__main__":
-    p = Pawn(1)
+    p = Pawn(Color.BLACK)
     print("color of pawn:", p.color)
     p.flip()
     print("color of pawn:", p.color)

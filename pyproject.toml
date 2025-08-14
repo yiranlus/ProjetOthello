@@ -12,9 +12,15 @@ dependencies = [
     "numpy>=1.24.4",
 ]
 
+[project.urls]
+Repository = "https://github.com/yiranlus/ProjetOthello"
+
 [project.scripts]
-othello-cli = "othello:main_cli"
+othello-cli = "othello:cli.main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["othello*"]
+
+[tool.setuptools.package-data]
+othello = ["py.typed"]
