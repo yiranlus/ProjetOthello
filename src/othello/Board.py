@@ -12,6 +12,7 @@ class Board:
         self.cols = 8
         self.number_pawns = 60
         self.fig = None
+        self.ax = None
 
         # initialize empty board
         self.board = np.empty((self.rows, self.cols), dtype=Case)
@@ -169,7 +170,11 @@ class Board:
             # if not plt.fignum_exists(1):
             plt.ion()
 
-            self.fig, ax = plt.subplots(num=1)
+
+            if not self.fig:
+                self.fig, self.ax = plt.subplots(num=1)
+            ax = self.ax
+
             if figtitle:
                 self.fig.suptitle(figtitle)
             ax.cla()
@@ -232,8 +237,9 @@ class Board:
             ax.yaxis.set_inverted(True)
 
             plt.gca().set_aspect(1.0)
+            self.fig.canvas.draw()
             plt.pause(0.5)
-            plt.show(block=False)
+            #plt.show(block=False)
 
         else:
             raise ValueError("Use 'console' for console display or 'matplotlib' for graphic display.")
